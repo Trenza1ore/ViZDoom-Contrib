@@ -10,7 +10,7 @@ and [Mark Towers](https://github.com/pseudo-rnd-thoughts).
 
 import itertools
 import warnings
-from typing import Optional
+from typing import Literal, Optional
 
 import gymnasium as gym
 import numpy as np
@@ -18,6 +18,7 @@ import pygame
 from gymnasium.utils import EzPickle
 
 import vizdoom.vizdoom as vzd
+from vizdoom.gymnasium_wrapper.semantic_segmentation import get_semantic_mapping
 
 
 # A fixed set of colors for each potential label
@@ -43,6 +44,7 @@ class VizdoomEnv(gym.Env, EzPickle):
         render_mode: Optional[str] = None,
         treat_episode_timeout_as_truncation: bool = True,
         use_multi_binary_action_space: bool = True,
+        semantic_classes: Optional[tuple[str, Literal["label", "rgb"]]] = None,
     ):
         """
         Base class for Gymnasium interface for ViZDoom.
@@ -68,6 +70,7 @@ class VizdoomEnv(gym.Env, EzPickle):
                                                     will be used for buttons binary buttons instead of ``MultiDiscrete([2] * len(num_binary_buttons))``.
                                                     This is compatibility option, ViZDoom versions <1.3.0 behave as if this was set to False.
                                                     Default: True.
+            semantic_classes: (tuple[str, "label" | "rgb"]): If set with (mapping_name, mapping_type), will perform     semantic segmentation on current game state based on labels buffer and the registered mapping, .
 
         This environment forces the game window to be hidden. Use :meth:`render` function to see the game.
 
@@ -119,6 +122,21 @@ class VizdoomEnv(gym.Env, EzPickle):
         self.channels = 3
         if screen_format == vzd.ScreenFormat.GRAY8:
             self.channels = 1
+
+        if semantic_classes:
+            self.game.set_labels_buffer_enabled(True)
+            mapping_name, mapping_type = semantic_classes
+            self.semantic_segmentation = get_semantic_mapping(
+                mapping_name, mapping_type
+            )
+            if mapping_type != "rgb":
+                self.semantic_segmentation_rgb = get_semantic_mapping(
+                    mapping_name, "rgb"
+                )
+            else:
+                self.semantic_segmentation_rgb = self.semantic_segmentation
+        else:
+            self.semantic_segmentation_rgb = self.semantic_segmentation = None
 
         self.depth = self.game.is_depth_buffer_enabled()
         self.labels = self.game.is_labels_buffer_enabled()
@@ -218,14 +236,20 @@ class VizdoomEnv(gym.Env, EzPickle):
             if self.channels == 1:
                 observation["screen"] = self.state.screen_buffer[..., None]
             if self.depth:
+                assert self.state.depth_buffer is not None
                 observation["depth"] = self.state.depth_buffer[..., None]
             if self.labels:
+                assert self.state.labels_buffer is not None
                 observation["labels"] = self.state.labels_buffer[..., None]
+                if self.semantic_segmentation is not None:
+                    observation["segmentation"] = self.semantic_segmentation(self.state)
             if self.automap:
+                assert self.state.automap_buffer is not None
                 observation["automap"] = self.state.automap_buffer
                 if self.channels == 1:
                     observation["automap"] = self.state.automap_buffer[..., None]
             if self.num_game_variables > 0:
+                assert self.state.game_variables is not None
                 observation["gamevariables"] = self.state.game_variables.astype(
                     np.float32
                 )
@@ -263,24 +287,30 @@ class VizdoomEnv(gym.Env, EzPickle):
             ]
 
         if self.depth:
+            assert game_state.depth_buffer is not None
             image_list.append(
                 np.repeat(game_state.depth_buffer[..., None], repeats=3, axis=2)
             )
 
         if self.labels:
-            # Give each label a fixed color.
-            # We need to connect each pixel in labels_buffer to the corresponding
-            # id via `value``
-            labels_rgb = np.zeros_like(image_list[0])
-            labels_buffer = game_state.labels_buffer
-            for label in game_state.labels:
-                color = LABEL_COLORS[label.object_id % 256]
-                labels_rgb[labels_buffer == label.value] = color
-            image_list.append(labels_rgb)
+            if self.semantic_segmentation_rgb:
+                # Perform semantic segmentation
+                image_list.append(self.semantic_segmentation_rgb(self.state))
+            else:
+                # Give each label a fixed color.
+                # We need to connect each pixel in labels_buffer to the corresponding
+                # id via `value``
+                labels_rgb = np.zeros_like(image_list[0])
+                labels_buffer = game_state.labels_buffer
+                for label in game_state.labels:
+                    color = LABEL_COLORS[label.object_id % 256]
+                    labels_rgb[labels_buffer == label.value] = color
+                image_list.append(labels_rgb)
 
         if self.automap:
             automap_buffer = game_state.automap_buffer
             if self.channels == 1:
+                assert automap_buffer is not None
                 automap_buffer = np.repeat(automap_buffer[..., None], repeats=3, axis=2)
             image_list.append(automap_buffer)
 
@@ -449,4 +479,4 @@ class VizdoomEnv(gym.Env, EzPickle):
                 dtype=np.float32,
             )
 
-        return gym.spaces.Dict(spaces)
+        return gym.spaces.Dict(spaces)  # type: ignore
