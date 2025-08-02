@@ -234,7 +234,7 @@ setup(
     extras_require={
         "test": ["pytest", "psutil"],
     },
-    install_requires=["numpy", "gymnasium>=0.28.0", "pygame>=2.1.3"],
+    install_requires=["numpy", "matplotlib", "gymnasium>=0.28.0", "pygame>=2.1.3"],
     python_requires=">=3.9.0,<3.14",
     packages=packages,
     package_dir={"": package_root},
