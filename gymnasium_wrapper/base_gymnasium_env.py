@@ -70,7 +70,7 @@ class VizdoomEnv(gym.Env, EzPickle):
                                                     will be used for buttons binary buttons instead of ``MultiDiscrete([2] * len(num_binary_buttons))``.
                                                     This is compatibility option, ViZDoom versions <1.3.0 behave as if this was set to False.
                                                     Default: True.
-            semantic_classes: (tuple[str, "label" | "rgb"]): If set with (mapping_name, mapping_type), will perform     semantic segmentation on current game state based on labels buffer and the registered mapping, .
+            semantic_classes: (tuple[str, "label" | "rgb"]): If set with (mapping_name, mapping_type), will perform semantic segmentation on current game state based on labels buffer and the registered mapping.
 
         This environment forces the game window to be hidden. Use :meth:`render` function to see the game.
 
