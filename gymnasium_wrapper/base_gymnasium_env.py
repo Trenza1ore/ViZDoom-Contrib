@@ -425,7 +425,7 @@ class VizdoomEnv(gym.Env, EzPickle):
     def __get_observation_space(self):
         """
         Returns observation space: Dict with Box entry for each activated buffer:
-          "screen", "depth", "labels", "automap", "gamevariables"
+          "screen", "depth", "labels", "automap", "gamevariables", "segmentation"
         """
         spaces = {
             "screen": gym.spaces.Box(
@@ -455,6 +455,22 @@ class VizdoomEnv(gym.Env, EzPickle):
                 (self.game.get_screen_height(), self.game.get_screen_width(), 1),
                 dtype=np.uint8,
             )
+            if self.semantic_segmentation is not None:
+                ch_num = (
+                    3
+                    if self.semantic_segmentation is self.semantic_segmentation_rgb
+                    else 1
+                )
+                spaces["segmentation"] = gym.spaces.Box(
+                    0,
+                    255,
+                    (
+                        self.game.get_screen_height(),
+                        self.game.get_screen_width(),
+                        ch_num,
+                    ),
+                    dtype=np.uint8,
+                )
 
         if self.automap:
             spaces["automap"] = gym.spaces.Box(
