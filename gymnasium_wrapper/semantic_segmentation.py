@@ -22,7 +22,9 @@ SemanticClassDef = namedtuple("SemanticClassDef", ["label", "rgb"])
 
 # External functions
 def get_semantic_mapping(
-    name: str, mapping_type: Literal["label", "rgb"]
+    name: str,
+    mapping_type: Literal["label", "rgb"],
+    cmap_override: Union[None, str, Colormap] = None,
 ) -> partial[np.ndarray]:
     """
     Get a semantic mapping function for the specified mapping name and type.
@@ -32,6 +34,7 @@ def get_semantic_mapping(
         mapping_type (Literal["label", "rgb"]): The type of mapping to return.
                                                "label" returns a function that produces label IDs.
                                                "rgb" returns a function that produces RGB colors.
+        cmap_override (Union[str, Colormap]): Override the colormap if specified, no effect on label.
 
     Returns:
         partial[np.ndarray]: A partial function that takes a GameState and returns a semantic segmentation array.
@@ -44,10 +47,13 @@ def get_semantic_mapping(
     """
     if mapping_type == "label":
         label_def = SEMANTIC_CLASS_MAPPINGS[name][0]
-        return partial(semseg, label_def=label_def)
+        return partial(semseg, hud_padding=[-1], label_def=label_def)
     elif mapping_type == "rgb":
-        label_def = SEMANTIC_CLASS_MAPPINGS[name][1]
-        return partial(semseg_rgb, label_def=label_def)
+        if cmap_override:
+            label_def = label2rgb(SEMANTIC_CLASS_MAPPINGS[name][0], cmap_override)
+        else:
+            label_def = SEMANTIC_CLASS_MAPPINGS[name][1]
+        return partial(semseg_rgb, hud_padding=[-1], label_def=label_def)
     raise ValueError(f"Unknown mapping type: {mapping_type}")
 
 
@@ -122,13 +128,16 @@ def construct_label_def(default_factory: Optional[Callable] = None, **kwargs):
 
 # Internal-ish functions
 def semseg(
-    state: GameState, label_def: Union[str, defaultdict[str, int]] = "default"
+    state: GameState,
+    hud_padding: list[int],
+    label_def: Union[str, defaultdict[str, int]] = "default",
 ) -> np.ndarray:
     """
-    Perform semantic segmentation on a game state, returning label IDs.
+    Perform semantic segmentation on a game state, returning label IDs. Will
 
     Arguments:
         state (GameState): The ViZDoom game state containing labels_buffer and labels.
+        hud_padding (list[int]): int is immutable but list is, -1: auto, 0: no hud, >0: hud starting row.
         label_def (Union[str, defaultdict[str, int]]): Either a string name of a registered mapping,
                                                        or a defaultdict mapping object names to label IDs.
                                                        Default: "default".
@@ -155,11 +164,14 @@ def semseg(
     buffer[raw_buffer == 0] = label_def_["Floor/Ceil"]
     buffer[raw_buffer == 1] = label_def_["Wall"]
 
-    row_is_all_zero = (raw_buffer == 0).all(axis=1)
-    valid_row_indices = np.where(~row_is_all_zero)[0]
+    cutoff = hud_padding[0]
+    if cutoff:
+        if cutoff < 0:
+            row_is_all_zero = (raw_buffer == 0).all(axis=1)
+            valid_row_indices = np.where(~row_is_all_zero)[0]
 
-    if len(valid_row_indices) > 0:
-        cutoff = valid_row_indices[-1] + 1
+            if len(valid_row_indices) > 0:
+                cutoff = hud_padding[0] = valid_row_indices[-1] + 1
         buffer[cutoff:] = 0
 
     if state.labels and "Self" in label_def_:
@@ -180,13 +192,16 @@ def semseg(
 
 
 def semseg_rgb(
-    state: GameState, label_def: Union[str, defaultdict[str, np.ndarray]] = "default"
+    state: GameState,
+    hud_padding: list[int],
+    label_def: Union[str, defaultdict[str, np.ndarray]] = "default",
 ) -> np.ndarray:
     """
     Perform semantic segmentation on a game state, returning RGB colors.
 
     Arguments:
         state (GameState): The ViZDoom game state containing labels_buffer and labels.
+        hud_padding (list[int]): int is immutable but list is, -1: auto, 0: no hud, >0: hud starting row.
         label_def (Union[str, defaultdict[str, np.ndarray]]): Either a string name of a registered mapping,
                                                               or a defaultdict mapping object names to RGB color arrays.
                                                               Default: "default".
@@ -215,12 +230,15 @@ def semseg_rgb(
     buffer[raw_buffer == 0, :] = label_def_["Floor/Ceil"]
     buffer[raw_buffer == 1, :] = label_def_["Wall"]
 
-    row_is_all_zero = (raw_buffer == 0).all(axis=1)
-    valid_row_indices = np.where(~row_is_all_zero)[0]
+    cutoff = hud_padding[0]
+    if cutoff:
+        if cutoff < 0:
+            row_is_all_zero = (raw_buffer == 0).all(axis=1)
+            valid_row_indices = np.where(~row_is_all_zero)[0]
 
-    if len(valid_row_indices) > 0:
-        cutoff = valid_row_indices[-1] + 1
-        buffer[cutoff:, :, :] = 0
+            if len(valid_row_indices) > 0:
+                cutoff = hud_padding[0] = valid_row_indices[-1] + 1
+        buffer[cutoff:] = 0
 
     if state.labels and "Self" in label_def_:
         for obj in state.labels[:-1]:
