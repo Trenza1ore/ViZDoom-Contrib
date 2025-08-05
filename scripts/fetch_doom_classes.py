@@ -185,7 +185,7 @@ extern std::unordered_map<std::string, std::unordered_set<std::string>> category
 
 // Mapping from class names to their category
 extern std::unordered_map<std::string, std::string> classToCategory;
-"""
+"""  # noqa
 
 
 def fetch_url_with_cache(
@@ -571,7 +571,7 @@ def generate_cpp_files(
 
 // All Doom classes as a set of strings
 std::unordered_set<std::string> allDoomClasses = {{
-"""
+"""  # noqa
 
     # Add all casefolded class names to the set
     for class_name in sorted(casefolded_class_names):
