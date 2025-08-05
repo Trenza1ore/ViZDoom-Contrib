@@ -1822,77 +1822,6 @@ See also:
 Note: added in 1.1.8.
 
 
-## Category mapping methods
-
----
-### `setCategoryMapping`
-
-| C++    | `void setCategoryMapping(const std::unordered_map<std::string, std::unordered_set<std::string>>& categoryToClasses)` |
-| :--    | :--                                                                                                                      |
-| Python | `set_category_mapping(category_to_classes: dict[str, set[str]]) -> None`                                                 |
-
-Sets a custom category mapping for object classification.
-When a custom mapping is set, it completely replaces the default category mapping.
-Objects not included in the custom mapping will be categorized as "Unknown".
-
-Has no effect when the game is running.
-
-Note: added in 1.3.0
-
-
----
-### `getCategoryForClass`
-
-| C++    | `std::string getCategoryForClass(const std::string& className)` |
-| :--    | :--                                                              |
-| Python | `get_category_for_class(class_name: str) -> str`                  |
-
-Returns the category for a given class name.
-If a custom category mapping is set, only the custom mapping will be used.
-Otherwise, the default category mapping will be used.
-
-Note: added in 1.3.0
-
-
----
-### `getAllDoomClasses`
-
-| C++    | `std::unordered_set<std::string> getAllDoomClasses()` |
-| :--    | :--                                                   |
-| Python | `get_all_doom_classes() -> set[str]`                   |
-
-Returns a set of all available Doom class names.
-This includes all classes that can appear in the game, regardless of whether they are currently visible.
-
-Note: added in 1.3.0
-
-
----
-### `getCategoryToClasses`
-
-| C++    | `std::unordered_map<std::string, std::unordered_set<std::string>> getCategoryToClasses()` |
-| :--    | :--                                                                                      |
-| Python | `get_category_to_classes() -> dict[str, set[str]]`                                       |
-
-Returns the current category-to-classes mapping.
-This mapping shows which classes belong to each category in the current classification system.
-
-Note: added in 1.3.0
-
-
----
-### `getClassToCategory`
-
-| C++    | `std::unordered_map<std::string, std::string> getClassToCategory()` |
-| :--    | :--                                                                 |
-| Python | `get_class_to_category() -> dict[str, str]`                          |
-
-Returns the current class-to-category mapping.
-This mapping shows which category each class belongs to in the current classification system.
-
-Note: added in 1.3.0
-
-
 ## Audio buffer methods
 
 ---
@@ -2009,3 +1938,77 @@ See also:
 - [examples/python/audio_buffer.py](https://github.com/Farama-Foundation/ViZDoom/tree/master/examples/python/audio_buffer.py)
 
 Note: added in 1.1.9.
+
+
+## Category mapping methods
+
+---
+### `setCategoryMapping`
+
+| C++    | `void setCategoryMapping(const std::unordered_map<std::string, std::unordered_set<std::string>>& categoryToClasses)` |
+| :--    | :--                                                                                                                      |
+| Python | `set_category_mapping(category_to_classes: dict[str, set[str]]) -> None`                                                 |
+
+Sets a custom category mapping for object classification.
+When a custom mapping is set, it completely replaces the default category mapping.
+Objects not included in the custom mapping will be categorized as "Unknown".
+The mapping is a dictionary with category names as keys and set of lowercase class names as values.
+
+Note: added in 1.3.0.
+
+
+---
+### `getCategoryForClass`
+
+| C++    | `std::string getCategoryForClass(const std::string& className)` |
+| :--    | :--                                                              |
+| Python | `get_category_for_class(class_name: str) -> str`                  |
+
+Returns the category for a given class name.
+If a custom category mapping is set, only the custom mapping will be used.
+Otherwise, the default category mapping will be used.
+The class name should be lowercase.
+
+Note: added in 1.3.0.
+
+
+---
+### `getAllDoomClasses`
+
+| C++    | `std::unordered_set<std::string> getAllDoomClasses()` |
+| :--    | :--                                                   |
+| Python | `get_all_doom_classes() -> set[str]`                   |
+
+Returns a set of all available Doom class names.
+This includes all classes that can appear in the game, regardless of whether they are currently visible.
+The class names are lowercase.
+
+Note: added in 1.3.0.
+
+
+---
+### `getCategoryToClasses`
+
+| C++    | `std::unordered_map<std::string, std::unordered_set<std::string>> getCategoryToClasses()` |
+| :--    | :--                                                                                      |
+| Python | `get_category_to_classes() -> dict[str, set[str]]`                                       |
+
+Returns the current category-to-classes mapping.
+This mapping shows which classes belong to each category in the current classification system.
+The class names are lowercase.
+
+Note: added in 1.3.0.
+
+
+---
+### `getClassToCategory`
+
+| C++    | `std::unordered_map<std::string, std::string> getClassToCategory()` |
+| :--    | :--                                                                 |
+| Python | `get_class_to_category() -> dict[str, str]`                          |
+
+Returns the current class-to-category mapping.
+This mapping shows which category each class belongs to in the current classification system.
+The mapping is a dictionary with lowercase class names as keys and category names as values.
+
+Note: added in 1.3.0.

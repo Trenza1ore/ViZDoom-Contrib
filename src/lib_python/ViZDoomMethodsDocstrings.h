@@ -896,27 +896,32 @@ Note: added in 1.1.9.)DOCSTRING";
     const char *setCategoryMapping = R"DOCSTRING(Sets a custom category mapping for object classification.
 When a custom mapping is set, it completely replaces the default category mapping.
 Objects not included in the custom mapping will be categorized as "Unknown".
+The mapping is a dictionary with category names as keys and set of lowercase class names as values.
 
 Note: added in 1.3.0.)DOCSTRING";
 
     const char *getCategoryForClass = R"DOCSTRING(Returns the category for a given class name.
 If a custom category mapping is set, only the custom mapping will be used.
 Otherwise, the default category mapping will be used.
+The class name should be lowercase.
 
 Note: added in 1.3.0.)DOCSTRING";
 
     const char *getAllDoomClasses = R"DOCSTRING(Returns a set of all available Doom class names.
 This includes all classes that can appear in the game, regardless of whether they are currently visible.
+The class names are lowercase.
 
 Note: added in 1.3.0.)DOCSTRING";
 
     const char *getCategoryToClasses = R"DOCSTRING(Returns the current category-to-classes mapping.
 This mapping shows which classes belong to each category in the current classification system.
+The class names are lowercase.
 
 Note: added in 1.3.0.)DOCSTRING";
 
     const char *getClassToCategory = R"DOCSTRING(Returns the current class-to-category mapping.
 This mapping shows which category each class belongs to in the current classification system.
+The mapping is a dictionary with lowercase class names as keys and category names as values.
 
 Note: added in 1.3.0.)DOCSTRING";
 

@@ -121,7 +121,7 @@ def construct_label_def(default_factory: Optional[Callable] = None, **kwargs):
 
     return defaultdict(
         return_default,
-        {obj_name.casefold().strip(): obj_val for obj_name, obj_val in kwargs.items()},
+        {category: label_id for category, label_id in kwargs.items()},
     )
 
 
