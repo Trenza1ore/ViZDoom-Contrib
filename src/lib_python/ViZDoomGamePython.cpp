@@ -53,7 +53,7 @@ namespace vizdoom {
 
         // TODO: the following line causes:
         // Fatal Python error: PyEval_SaveThread: NULL tstate
-        //ReleaseGIL gil = ReleaseGIL();
+        AcquireGIL gil = AcquireGIL();
         this->pyState = new GameStatePython();
 
         this->pyState->number = this->state->number;
@@ -200,7 +200,6 @@ namespace vizdoom {
             for (auto className : classList) {
                 classes.insert(pyb::cast<std::string>(className));
             }
-
             categoryToClasses[category] = classes;
         }
 
