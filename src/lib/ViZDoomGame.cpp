@@ -350,7 +350,7 @@ namespace vizdoom {
                 this->state->labelsBuffer = std::make_shared<std::vector<uint8_t>>(buf, buf + graySize);
 
                 /* Update labels */
-                size_t labelPartSize = offsetof(struct Label, objectCategory) - offsetof(struct Label, value);
+                size_t labelPartSize = offsetof(struct Label, objectName) - offsetof(struct Label, value);
                 for (unsigned int i = 0; i < smState->LABEL_COUNT; ++i) {
                     this->state->labels.emplace_back();
                     std::memcpy(&this->state->labels.back().value, &smState->LABEL[i].value, labelPartSize);
