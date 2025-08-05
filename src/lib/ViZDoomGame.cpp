@@ -29,7 +29,7 @@
 #include "ViZDoomExceptions.h"
 #include "ViZDoomPathHelpers.h"
 #include "ViZDoomUtilities.h"
-#include "viz_doom_classes.h"
+#include "../vizdoom/src/viz_doom_classes.h"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
