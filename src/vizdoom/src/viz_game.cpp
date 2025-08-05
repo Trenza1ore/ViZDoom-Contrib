@@ -455,17 +455,27 @@ void VIZ_GameStateUpdateLabels(){
                 vizLabel->value = sprite.label;
                 VIZ_CopyActorName(sprite.actor, vizLabel->objectName);
 
-                // Get the category for this object
-                std::string className = sprite.actor->GetClass()->TypeName.GetChars();
-                // Convert to lowercase for lookup since the mapping uses casefolded names
-                std::string classNameLower = className;
-                std::transform(classNameLower.begin(), classNameLower.end(), classNameLower.begin(), ::tolower);
-
-                auto categoryIt = classToCategory.find(classNameLower);
-                if (categoryIt != classToCategory.end()) {
-                    strncpy(vizLabel->objectCategory, categoryIt->second.c_str(), VIZ_MAX_NAME_LEN);
+                // Check for special cases before matching category
+                if (strncmp(vizLabel->objectName, "Dead", 4) == 0) {
+                    // Align with the behavior of VIZ_CopyActorName
+                    strncpy(vizLabel->objectCategory, "Gore", VIZ_MAX_NAME_LEN);
+                } else if (strncmp(vizLabel->objectName, "DoomPlayer", 10) == 0) {
+                    // Detect whether this object is current player
+                    if (sprite.actor == VIZ_PLAYER.mo) {
+                        strncpy(vizLabel->objectCategory, "Self", VIZ_MAX_NAME_LEN);
+                    } else {
+                        strncpy(vizLabel->objectCategory, "Player", VIZ_MAX_NAME_LEN);
+                    }
                 } else {
-                    strncpy(vizLabel->objectCategory, "Unknown", VIZ_MAX_NAME_LEN);
+                    // Convert to lowercase for lookup since the mapping uses casefolded names
+                    std::string className = sprite.actor->GetClass()->TypeName.GetChars();
+                    std::transform(className.begin(), className.end(), className.begin(), tolower);
+                    auto categoryIt = classToCategory.find(className);
+                    if (categoryIt != classToCategory.end()) {
+                        strncpy(vizLabel->objectCategory, categoryIt->second.c_str(), VIZ_MAX_NAME_LEN);
+                    } else {
+                        strncpy(vizLabel->objectCategory, "Unknown", VIZ_MAX_NAME_LEN);
+                    }
                 }
 
                 if(sprite.minX >= vizGameStateSM->SCREEN_WIDTH) sprite.minX = vizGameStateSM->SCREEN_WIDTH - 1;

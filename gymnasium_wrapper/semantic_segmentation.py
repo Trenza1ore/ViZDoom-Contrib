@@ -173,17 +173,8 @@ def semseg(
                 cutoff = hud_padding[0] = valid_row_indices[-1] + 1
         buffer[cutoff:] = 0
 
-    if state.labels and "Self" in label_def_:
-        for obj in state.labels[:-1]:
-            buffer[raw_buffer == obj.value] = label_def_[obj.object_category]
-        last_obj = state.labels[-1]
-        if last_obj.object_category == "Player":
-            buffer[raw_buffer == last_obj.value] = label_def_["Self"]
-        else:
-            buffer[raw_buffer == last_obj.value] = label_def_[last_obj.object_category]
-    else:
-        for obj in state.labels:
-            buffer[raw_buffer == obj.value] = label_def_[obj.object_category]
+    for obj in state.labels:
+        buffer[raw_buffer == obj.value] = label_def_[obj.object_category]
 
     return buffer
 
@@ -237,20 +228,8 @@ def semseg_rgb(
                 cutoff = hud_padding[0] = valid_row_indices[-1] + 1
         buffer[cutoff:] = 0
 
-    if state.labels and "Self" in label_def_:
-        for obj in state.labels[:-1]:
-            buffer[raw_buffer == obj.value, :] = label_def_[obj.object_category]
-
-        last_obj = state.labels[-1]
-        if last_obj.object_category == "Player":
-            buffer[raw_buffer == last_obj.value, :] = label_def_["Self"]
-        else:
-            buffer[raw_buffer == last_obj.value, :] = label_def_[
-                last_obj.object_category
-            ]
-    else:
-        for obj in state.labels:
-            buffer[raw_buffer == obj.value, :] = label_def_[obj.object_category]
+    for obj in state.labels:
+        buffer[raw_buffer == obj.value, :] = label_def_[obj.object_category]
 
     return buffer
 
