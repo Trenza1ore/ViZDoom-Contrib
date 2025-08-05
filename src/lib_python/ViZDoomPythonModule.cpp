@@ -399,7 +399,8 @@ PYBIND11_MODULE(vizdoom, vz){
                     o.objectVelocityX,
                     o.objectVelocityY,
                     o.objectVelocityZ,
-                    o.objectName
+                    o.objectName,
+                    o.objectCategory
                 );
             },
             [](pyb::tuple t) { // load
@@ -419,7 +420,8 @@ PYBIND11_MODULE(vizdoom, vz){
                     t[12].cast<double>(),
                     t[13].cast<double>(),
                     t[14].cast<double>(),
-                    t[15].cast<std::string>()
+                    t[15].cast<std::string>(),
+                    t[16].cast<std::string>()
                 };
             })
         )
@@ -438,7 +440,8 @@ PYBIND11_MODULE(vizdoom, vz){
         .def_readonly("object_velocity_x", &Label::objectVelocityX)
         .def_readonly("object_velocity_y", &Label::objectVelocityY)
         .def_readonly("object_velocity_z", &Label::objectVelocityZ)
-        .def_readonly("object_name", &Label::objectName);
+        .def_readonly("object_name", &Label::objectName)
+        .def_readonly("object_category", &Label::objectCategory);
 
     pyb::class_<Object>(vz, "Object", docstrings::Object)
             .def(pyb::pickle(
@@ -657,7 +660,7 @@ PYBIND11_MODULE(vizdoom, vz){
         CLASS_FUNC_2_PYT_WITH_ARGS("set_death_reward", DoomGamePython::setDeathReward, pyb::arg("death_reward"))
         CLASS_FUNC_2_PYT("get_map_exit_reward", DoomGamePython::getMapExitReward)
         CLASS_FUNC_2_PYT_WITH_ARGS("set_map_exit_reward", DoomGamePython::setMapExitReward, pyb::arg("map_exit_reward"))
-        
+
         CLASS_FUNC_2_PYT("get_kill_reward", DoomGamePython::getKillReward)
         CLASS_FUNC_2_PYT_WITH_ARGS("set_kill_reward", DoomGamePython::setKillReward, pyb::arg("kill_reward"))
         CLASS_FUNC_2_PYT("get_secret_reward", DoomGamePython::getSecretReward)
@@ -770,6 +773,13 @@ PYBIND11_MODULE(vizdoom, vz){
         CLASS_FUNC_2_PYT_WITH_ARGS("set_render_screen_flashes", DoomGamePython::setRenderScreenFlashes, pyb::arg("flashes"))
         CLASS_FUNC_2_PYT_WITH_ARGS("set_render_all_frames", DoomGamePython::setRenderAllFrames, pyb::arg("all_frames"))
         CLASS_FUNC_2_PYT_WITH_ARGS("set_window_visible", DoomGamePython::setWindowVisible, pyb::arg("visiblity"))
+
+        CLASS_FUNC_2_PYT_WITH_ARGS("set_category_mapping", DoomGamePython::setCategoryMapping, pyb::arg("category_to_classes"))
+        CLASS_FUNC_2_PYT_WITH_ARGS("get_category_for_class", DoomGamePython::getCategoryForClass, pyb::arg("class_name"))
+        CLASS_FUNC_2_PYT("get_all_doom_classes", DoomGamePython::getAllDoomClasses)
+        CLASS_FUNC_2_PYT("get_category_to_classes", DoomGamePython::getCategoryToClasses)
+        CLASS_FUNC_2_PYT("get_class_to_category", DoomGamePython::getClassToCategory)
+
         CLASS_FUNC_2_PYT("get_screen_width", DoomGamePython::getScreenWidth)
         CLASS_FUNC_2_PYT("get_screen_height", DoomGamePython::getScreenHeight)
         CLASS_FUNC_2_PYT("get_screen_channels", DoomGamePython::getScreenChannels)

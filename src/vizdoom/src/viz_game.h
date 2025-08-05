@@ -28,6 +28,9 @@
 #include <viz_labels.h>
 #include <viz_shared_memory.h>
 #include <string.h>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
 
 #include "dobject.h"
 #include "dobjtype.h"
@@ -79,6 +82,7 @@ struct VIZLabel{
     unsigned int objectId;
     double objectPosition[9];
     char objectName[VIZ_MAX_NAME_LEN];
+    char objectCategory[VIZ_MAX_NAME_LEN];
 };
 
 struct VIZObject{
@@ -234,5 +238,9 @@ void VIZ_GameStateInitNew();
 void VIZ_GameStateClose();
 
 void VIZ_PrintPlayers();
+
+void VIZ_SetCustomCategoryMapping(const std::unordered_map<std::string, std::unordered_set<std::string>>& categoryToClasses);
+
+void VIZ_ClearCustomCategoryMapping();
 
 #endif

@@ -26,6 +26,8 @@
 
 #include <cstddef>
 #include <cstring>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace vizdoom {
     DoomGamePython::DoomGamePython() {
@@ -185,6 +187,62 @@ namespace vizdoom {
     void DoomGamePython::respawnPlayer(){
         ReleaseGIL gil = ReleaseGIL();
         DoomGame::respawnPlayer();
+    }
+
+    void DoomGamePython::setCategoryMapping(pyb::dict const &pyCategoryToClasses) {
+        std::unordered_map<std::string, std::unordered_set<std::string>> categoryToClasses;
+
+        for (auto item : pyCategoryToClasses) {
+            std::string category = pyb::cast<std::string>(item.first);
+            pyb::list classList = pyb::cast<pyb::list>(item.second);
+
+            std::unordered_set<std::string> classes;
+            for (auto className : classList) {
+                classes.insert(pyb::cast<std::string>(className));
+            }
+
+            categoryToClasses[category] = classes;
+        }
+
+        DoomGame::setCategoryMapping(categoryToClasses);
+    }
+
+    std::string DoomGamePython::getCategoryForClass(std::string const &className) {
+        return DoomGame::getCategoryForClass(className);
+    }
+
+    pyb::set DoomGamePython::getAllDoomClasses() {
+        auto classes = DoomGame::getAllDoomClasses();
+        pyb::set pySet;
+        for (const auto& className : classes) {
+            pySet.add(className);
+        }
+        return pySet;
+    }
+
+    pyb::dict DoomGamePython::getCategoryToClasses() {
+        auto mapping = DoomGame::getCategoryToClasses();
+        pyb::dict pyDict;
+        for (const auto& categoryPair : mapping) {
+            const std::string& category = categoryPair.first;
+            const std::unordered_set<std::string>& classes = categoryPair.second;
+
+            pyb::list classList;
+            for (const std::string& className : classes) {
+                classList.append(className);
+            }
+            pyDict[pyb::str(category)] = classList;
+        }
+        return pyDict;
+    }
+
+    pyb::dict DoomGamePython::getClassToCategory() {
+        auto mapping = DoomGame::getClassToCategory();
+        pyb::dict pyDict;
+        for (const auto& classPair : mapping) {
+            pyDict[pyb::str(classPair.first)] = classPair.second;
+        }
+        return pyDict;
     }
 
     void DoomGamePython::updateBuffersShapes(){

@@ -11,7 +11,9 @@ namespace docstrings {
     const char *Button = R"DOCSTRING(Defines available game buttons/actions that can be used to control the game.)DOCSTRING";
     const char *GameVariable = R"DOCSTRING(Defines available game variables that can be accessed to get information about the game state.)DOCSTRING";
     const char *SamplingRate = R"DOCSTRING(Defines available audio sampling rates.)DOCSTRING";
-    const char *Label = R"DOCSTRING(Represents object labels in the game world with associated properties.)DOCSTRING";
+    const char *Label = R"DOCSTRING(Represents object labels in the game world with associated properties.
+Each label contains information about an object visible in the game, including its position, name, and category.
+The category field indicates the type of object (e.g., "Monsters", "Weapons", "Items") and can be customized using set_category_mapping().)DOCSTRING";
     const char *Line = R"DOCSTRING(Represents line segments in the game world geometry.)DOCSTRING";
     const char *Sector = R"DOCSTRING(Represents sectors (floor/ceiling areas) in the game world geometry.)DOCSTRING";
     const char *Object = R"DOCSTRING(Represents objects in the game world with position and other properties.)DOCSTRING";

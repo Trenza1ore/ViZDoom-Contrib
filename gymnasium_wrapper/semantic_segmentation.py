@@ -13,7 +13,6 @@ import numpy as np
 from matplotlib import cm
 from matplotlib.colors import Colormap
 
-import vizdoom.doom_classes as doom_classes
 from vizdoom import GameState
 
 
@@ -83,9 +82,9 @@ def register_semantic_mapping(
 
     Example:
         >>> reserved = {"Floor/Ceil": 10, "Wall": 20, "Self": 250}
-        >>> label_def = construct_label_def(doomplayer=50, **reserved)
+        >>> label_def = construct_label_def(Weapon=50, **reserved)
         >>> mapping = register_semantic_mapping("custom", custom_labels, "plasma")
-        >>> # Now can use: get_semantic_mapping("custom", "label")
+        # Now can use: get_semantic_mapping("custom", "label")
     """
     if name in SEMANTIC_CLASS_MAPPINGS and not force:
         raise ValueError(f"Name {name} already registered!")
@@ -109,7 +108,7 @@ def construct_label_def(default_factory: Optional[Callable] = None, **kwargs):
 
     Example:
         >>> reserved = {"Floor/Ceil": 10, "Wall": 20, "Self": 250}
-        >>> label_def = construct_label_def(doomplayer=50, **reserved)
+        >>> label_def = construct_label_def(Weapon=50, **reserved)
         >>> label_def["Wall"]  # Returns 20
         >>> label_def["Unknown"]  # Returns 0 (default)
     """
@@ -176,17 +175,15 @@ def semseg(
 
     if state.labels and "Self" in label_def_:
         for obj in state.labels[:-1]:
-            buffer[raw_buffer == obj.value] = label_def_[obj.object_name.lower()]
+            buffer[raw_buffer == obj.value] = label_def_[obj.object_category]
         last_obj = state.labels[-1]
-        if last_obj.object_name == "doomplayer":
+        if last_obj.object_category == "Player":
             buffer[raw_buffer == last_obj.value] = label_def_["Self"]
         else:
-            buffer[raw_buffer == last_obj.value] = label_def_[
-                last_obj.object_name.lower()
-            ]
+            buffer[raw_buffer == last_obj.value] = label_def_[last_obj.object_category]
     else:
         for obj in state.labels:
-            buffer[raw_buffer == obj.value] = label_def_[obj.object_name.lower()]
+            buffer[raw_buffer == obj.value] = label_def_[obj.object_category]
 
     return buffer
 
@@ -242,18 +239,18 @@ def semseg_rgb(
 
     if state.labels and "Self" in label_def_:
         for obj in state.labels[:-1]:
-            buffer[raw_buffer == obj.value, :] = label_def_[obj.object_name.lower()]
+            buffer[raw_buffer == obj.value, :] = label_def_[obj.object_category]
 
         last_obj = state.labels[-1]
-        if last_obj.object_name == "doomplayer":
+        if last_obj.object_category == "Player":
             buffer[raw_buffer == last_obj.value, :] = label_def_["Self"]
         else:
             buffer[raw_buffer == last_obj.value, :] = label_def_[
-                last_obj.object_name.lower()
+                last_obj.object_category
             ]
     else:
         for obj in state.labels:
-            buffer[raw_buffer == obj.value, :] = label_def_[obj.object_name.lower()]
+            buffer[raw_buffer == obj.value, :] = label_def_[obj.object_category]
 
     return buffer
 
@@ -278,7 +275,7 @@ def label2rgb(
     Example:
 
         >>> reserved = {"Floor/Ceil": 10, "Wall": 20, "Self": 250}
-        >>> label_def = construct_label_def(doomplayer=50, **reserved)
+        >>> label_def = construct_label_def(Weapon=50, **reserved)
         >>> rgb_def = label2rgb(label_def, "viridis")
         >>> rgb_def["Wall"]  # Returns RGB array for label "Wall"
     """
@@ -332,27 +329,18 @@ def generate_default_mapping():
         "Weapon",
     ]
 
-    can_overwrite = defaultdict(
-        lambda: False, {"Light_source": True, "Breakable": True, "Player": True}
-    )
     indices = [
         int(i)
         for i in np.linspace(0, 255, len(categories) + 4, endpoint=True, dtype=np.int32)
     ]
+
     mapping = defaultdict(
         return_default,
         {"Floor/Ceil": indices[1], "Wall": indices[2], "Self": indices[-1]},
     )
 
     for i, category in enumerate(categories, start=3):
-        class_names = doom_classes.CATEGORIES[category].copy()
-        if category == "Monster":
-            class_names.extend(["MarineChainsawVzd"])
-        if category == "Weapon":
-            class_names.extend([f"DehackedPickup{v}" for v in range(20)])
-        for class_name in sorted(set(class_names)):
-            if class_name not in mapping or can_overwrite[category]:
-                mapping[class_name.casefold().strip()] = indices[i]
+        mapping[category] = indices[i]
 
     return register_semantic_mapping("default", mapping, label_cmap="jet")
 

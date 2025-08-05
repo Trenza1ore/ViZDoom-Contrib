@@ -116,6 +116,14 @@ namespace vizdoom {
         pyb::list getAvailableGameVariables();
         void setAvailableGameVariables(pyb::list const &pyGameVariables);
 
+        void setCategoryMapping(pyb::dict const &pyCategoryToClasses);
+        std::string getCategoryForClass(std::string const &className);
+
+        // Default Doom class mappings (read-only)
+        pyb::set getAllDoomClasses();
+        pyb::dict getCategoryToClasses();
+        pyb::dict getClassToCategory();
+
         // These functions are wrapped for manual GIL management
         void init();
         void newEpisode(std::string filePath = "");

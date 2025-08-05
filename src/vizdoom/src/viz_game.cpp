@@ -30,6 +30,7 @@
 #include "viz_buffers.h"
 #include "viz_shared_memory.h"
 #include "viz_version.h"
+#include "viz_doom_classes.h"
 
 #include "d_netinf.h"
 #include "d_event.h"
@@ -453,6 +454,19 @@ void VIZ_GameStateUpdateLabels(){
                 vizLabel->objectId = VIZ_GetActorId(sprite.actor);
                 vizLabel->value = sprite.label;
                 VIZ_CopyActorName(sprite.actor, vizLabel->objectName);
+
+                // Get the category for this object
+                std::string className = sprite.actor->GetClass()->TypeName.GetChars();
+                // Convert to lowercase for lookup since the mapping uses casefolded names
+                std::string classNameLower = className;
+                std::transform(classNameLower.begin(), classNameLower.end(), classNameLower.begin(), ::tolower);
+
+                auto categoryIt = classToCategory.find(classNameLower);
+                if (categoryIt != classToCategory.end()) {
+                    strncpy(vizLabel->objectCategory, categoryIt->second.c_str(), VIZ_MAX_NAME_LEN);
+                } else {
+                    strncpy(vizLabel->objectCategory, "Unknown", VIZ_MAX_NAME_LEN);
+                }
 
                 if(sprite.minX >= vizGameStateSM->SCREEN_WIDTH) sprite.minX = vizGameStateSM->SCREEN_WIDTH - 1;
                 if(sprite.minY >= vizGameStateSM->SCREEN_HEIGHT) sprite.minY = vizGameStateSM->SCREEN_HEIGHT - 1;

@@ -301,6 +301,14 @@ class DoomGame:
         The game can be initialized again after being closed.
         """
 
+    def get_all_doom_classes(self) -> set:
+        """
+        Returns a set of all available Doom class names.
+        This includes all classes that can appear in the game, regardless of whether they are currently visible.
+
+        Note: added in 1.3.0.
+        """
+
     def get_armor_reward(self) -> float:
         """
         Returns the reward granted to the player for getting armor points.
@@ -364,6 +372,31 @@ class DoomGame:
     def get_button_max_value(self, button: Button) -> float:
         """
         Returns the maximum allowed absolute value for the specified :class:`.Button`.
+        """
+
+    def get_category_for_class(self, class_name: str) -> str:
+        """
+        Returns the category for a given class name.
+        If a custom category mapping is set, only the custom mapping will be used.
+        Otherwise, the default category mapping will be used.
+
+        Note: added in 1.3.0.
+        """
+
+    def get_category_to_classes(self) -> dict:
+        """
+        Returns the current category-to-classes mapping.
+        This mapping shows which classes belong to each category in the current classification system.
+
+        Note: added in 1.3.0.
+        """
+
+    def get_class_to_category(self) -> dict:
+        """
+        Returns the current class-to-category mapping.
+        This mapping shows which category each class belongs to in the current classification system.
+
+        Note: added in 1.3.0.
         """
 
     def get_damage_made_reward(self) -> float:
@@ -938,6 +971,15 @@ class DoomGame:
         Default value: 0 (no constraint, infinity).
 
         Has no effect when the game is running.
+        """
+
+    def set_category_mapping(self, category_to_classes: dict) -> None:
+        """
+        Sets a custom category mapping for object classification.
+        When a custom mapping is set, it completely replaces the default category mapping.
+        Objects not included in the custom mapping will be categorized as "Unknown".
+
+        Note: added in 1.3.0.
         """
 
     def set_console_enabled(self, console: bool) -> None:
@@ -2027,6 +2069,8 @@ class GameVariable:
 class Label:
     """
     Represents object labels in the game world with associated properties.
+    Each label contains information about an object visible in the game, including its position, name, and category.
+    The category field indicates the type of object (e.g., "Monsters", "Weapons", "Items") and can be customized using set_category_mapping().
     """
 
     def __getstate__(self) -> tuple: ...
@@ -2035,6 +2079,8 @@ class Label:
     def height(self) -> int: ...
     @property
     def object_angle(self) -> float: ...
+    @property
+    def object_category(self) -> str: ...
     @property
     def object_id(self) -> int: ...
     @property
@@ -2815,4 +2861,4 @@ WEAPON8: GameVariable  # value = <GameVariable.WEAPON8: 35>
 WEAPON9: GameVariable  # value = <GameVariable.WEAPON9: 36>
 WHOLE: AutomapMode  # value = <AutomapMode.WHOLE: 1>
 ZOOM: Button  # value = <Button.ZOOM: 7>
-__version__: str = "1.3.0.dev2"
+__version__: str

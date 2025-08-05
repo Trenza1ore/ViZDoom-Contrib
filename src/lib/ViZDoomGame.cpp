@@ -29,11 +29,13 @@
 #include "ViZDoomExceptions.h"
 #include "ViZDoomPathHelpers.h"
 #include "ViZDoomUtilities.h"
+#include "viz_doom_classes.h"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/filesystem.hpp> // for reading the shared object/dll path
 
+#include <algorithm>
 #include <cstddef>
 #include <cstring>
 
@@ -348,11 +350,26 @@ namespace vizdoom {
                 this->state->labelsBuffer = std::make_shared<std::vector<uint8_t>>(buf, buf + graySize);
 
                 /* Update labels */
-                size_t labelPartSize = offsetof(struct Label, objectName) - offsetof(struct Label, value);
+                size_t labelPartSize = offsetof(struct Label, objectCategory) - offsetof(struct Label, value);
                 for (unsigned int i = 0; i < smState->LABEL_COUNT; ++i) {
                     this->state->labels.emplace_back();
                     std::memcpy(&this->state->labels.back().value, &smState->LABEL[i].value, labelPartSize);
                     this->state->labels.back().objectName = std::string(smState->LABEL[i].objectName);
+
+                    // Apply custom category mapping if set, otherwise use the default from shared memory
+                    if (!this->customClassToCategory.empty()) {
+                        std::string className = this->state->labels.back().objectName;
+                        std::transform(className.begin(), className.end(), className.begin(), ::tolower);
+
+                        auto categoryIt = this->customClassToCategory.find(className);
+                        if (categoryIt != this->customClassToCategory.end()) {
+                            this->state->labels.back().objectCategory = categoryIt->second;
+                        } else {
+                            this->state->labels.back().objectCategory = "Unknown";
+                        }
+                    } else {
+                        this->state->labels.back().objectCategory = std::string(smState->LABEL[i].objectCategory);
+                    }
                 }
             } else this->state->labelsBuffer = nullptr;
 
@@ -766,6 +783,65 @@ namespace vizdoom {
     void DoomGame::setWindowVisible(bool visibility) {
         this->doomController->setNoXServer(!visibility);
         this->doomController->setWindowHidden(!visibility);
+    }
+
+    void DoomGame::setCategoryMapping(const std::unordered_map<std::string, std::unordered_set<std::string>>& categoryToClasses) {
+        // Store the custom mapping for this DoomGame instance
+        this->customCategoryToClasses = categoryToClasses;
+
+        // Generate the reverse mapping (class to category)
+        this->customClassToCategory.clear();
+        for (const auto& categoryPair : categoryToClasses) {
+            const std::string& category = categoryPair.first;
+            const std::unordered_set<std::string>& classes = categoryPair.second;
+
+            for (const std::string& className : classes) {
+                this->customClassToCategory[className] = category;
+            }
+        }
+    }
+
+    std::string DoomGame::getCategoryForClass(const std::string& className) {
+        // Convert to lowercase for lookup
+        std::string classNameLower = className;
+        std::transform(classNameLower.begin(), classNameLower.end(), classNameLower.begin(), ::tolower);
+
+        // If custom mappings are set, only use them
+        if (!this->customClassToCategory.empty()) {
+            auto it = this->customClassToCategory.find(classNameLower);
+            if (it != this->customClassToCategory.end()) {
+                return it->second;
+            }
+            return "Unknown";
+        }
+
+        // Otherwise, use default mappings
+        auto defaultIt = classToCategory.find(classNameLower);
+        if (defaultIt != classToCategory.end()) {
+            return defaultIt->second;
+        }
+
+        return "Unknown";
+    }
+
+    std::unordered_set<std::string> DoomGame::getAllDoomClasses() {
+        return allDoomClasses;
+    }
+
+    std::unordered_map<std::string, std::unordered_set<std::string>> DoomGame::getCategoryToClasses() {
+        if (!this->customCategoryToClasses.empty()) {
+            return this->customCategoryToClasses;
+        } else {
+            return categoryToClasses;
+        }
+    }
+
+    std::unordered_map<std::string, std::string> DoomGame::getClassToCategory() {
+        if (!this->customClassToCategory.empty()) {
+            return this->customClassToCategory;
+        } else {
+            return classToCategory;
+        }
     }
 
     void DoomGame::setConsoleEnabled(bool console) { this->doomController->setNoConsole(!console); }

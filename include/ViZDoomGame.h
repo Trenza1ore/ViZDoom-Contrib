@@ -30,6 +30,8 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace vizdoom {
@@ -221,6 +223,15 @@ namespace vizdoom {
         void setRenderScreenFlashes(bool flashes);
         void setRenderAllFrames(bool allFrames);
         void setWindowVisible(bool visibility);
+
+        void setCategoryMapping(const std::unordered_map<std::string, std::unordered_set<std::string>>& categoryToClasses);
+        std::string getCategoryForClass(const std::string& className);
+
+        // Get Doom class mappings (read-only)
+        std::unordered_set<std::string> getAllDoomClasses();
+        std::unordered_map<std::string, std::unordered_set<std::string>> getCategoryToClasses();
+        std::unordered_map<std::string, std::string> getClassToCategory();
+
         void setConsoleEnabled(bool console);
         void setSoundEnabled(bool sound);
 
@@ -298,6 +309,9 @@ namespace vizdoom {
         int lastArmor;
 
     private:
+        // Custom category mappings
+        std::unordered_map<std::string, std::unordered_set<std::string>> customCategoryToClasses;
+        std::unordered_map<std::string, std::string> customClassToCategory;
 
     };
 }

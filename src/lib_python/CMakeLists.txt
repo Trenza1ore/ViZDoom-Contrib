@@ -111,7 +111,6 @@ endif()
 
 add_custom_command(
     TARGET assemble_package
-    COMMAND ${CMAKE_COMMAND} -E copy ${VIZDOOM_PYTHON_SRC_DIR}/doom_classes.py ${VIZDOOM_PYTHON_PACKAGE_DIR}
     COMMAND ${CMAKE_COMMAND} -E copy ${VIZDOOM_PYTHON_SRC_DIR}/vizdoom.pyi ${VIZDOOM_PYTHON_PACKAGE_DIR}
     COMMAND ${CMAKE_COMMAND} -E copy ${VIZDOOM_PYTHON_SRC_DIR}/py.typed ${VIZDOOM_PYTHON_PACKAGE_DIR}
 )
