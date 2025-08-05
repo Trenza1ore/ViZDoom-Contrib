@@ -68,10 +68,10 @@ def register_semantic_mapping(
 
     Arguments:
         name (str): The name to register the mapping under. This name can be used with get_semantic_mapping().
-        label_def (defaultdict[str, int]): A defaultdict mapping object names to label IDs.
+        label_def (defaultdict[str, int]): A defaultdict mapping category names to label IDs.
         label_cmap (Union[str, Colormap]): A matplotlib colormap or colormap name to use for RGB color generation.
                                            Only used if label_rgb is None. Default: "turbo".
-        label_rgb (Optional[defaultdict[str, np.ndarray]]): A defaultdict mapping object names to RGB color arrays.
+        label_rgb (Optional[defaultdict[str, np.ndarray]]): A defaultdict mapping category names to RGB color arrays.
                                                             If None, will be generated from label_def and label_cmap.
                                                             Default: None.
         force (bool): Whether to force register even if there is already a mapping with same name.
@@ -101,7 +101,7 @@ def construct_label_def(default_factory: Optional[Callable] = None, **kwargs):
 
     Arguments:
         default_factory (Optional[Callable]): Function to generate default value. Default: None
-        **kwargs: Keyword arguments where keys are object names and values are their label IDs.
+        **kwargs: Keyword arguments where keys are category names and values are their label IDs.
 
     Returns:
         defaultdict: A defaultdict that returns 0 for unknown objects and maps known objects to their label IDs.
@@ -138,7 +138,7 @@ def semseg(
         state (GameState): The ViZDoom game state containing labels_buffer and labels.
         hud_padding (list[int]): int is immutable but list is, -1: auto, 0: no hud, >0: hud starting row.
         label_def (Union[str, defaultdict[str, int]]): Either a string name of a registered mapping,
-                                                       or a defaultdict mapping object names to label IDs.
+                                                       or a defaultdict mapping category names to label IDs.
                                                        Default: "default".
 
     Returns:
@@ -200,7 +200,7 @@ def semseg_rgb(
         state (GameState): The ViZDoom game state containing labels_buffer and labels.
         hud_padding (list[int]): int is immutable but list is, -1: auto, 0: no hud, >0: hud starting row.
         label_def (Union[str, defaultdict[str, np.ndarray]]): Either a string name of a registered mapping,
-                                                              or a defaultdict mapping object names to RGB color arrays.
+                                                              or a defaultdict mapping category names to RGB color arrays.
                                                               Default: "default".
 
     Returns:
@@ -263,12 +263,12 @@ def label2rgb(
     Convert label definitions to RGB color mappings using a matplotlib colormap.
 
     Arguments:
-        label_defs (defaultdict[str, int]): A defaultdict mapping object names to label IDs.
+        label_defs (defaultdict[str, int]): A defaultdict mapping category names to label IDs.
         color_map (Union[Colormap, str]): A matplotlib colormap or colormap name to use for color generation.
                                           Default: "turbo".
 
     Returns:
-        defaultdict[str, np.ndarray]: A defaultdict mapping object names to RGB color arrays.
+        defaultdict[str, np.ndarray]: A defaultdict mapping category names to RGB color arrays.
                                      Unknown objects get the color corresponding to label ID 0.
                                      Each RGB color is a numpy array of shape (3,) with uint8 dtype.
 
