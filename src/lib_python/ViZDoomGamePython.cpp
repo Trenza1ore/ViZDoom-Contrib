@@ -34,6 +34,7 @@ namespace vizdoom {
         this->grayShape.resize(2);
         this->audioShape.resize(2);
         this->variablesShape.resize(1);
+        AcquireGIL gil = AcquireGIL();
     }
 
     void DoomGamePython::setAction(pyb::object const &pyAction) {
@@ -51,9 +52,14 @@ namespace vizdoom {
     GameStatePython* DoomGamePython::getState() {
         if (this->state == nullptr) return nullptr;
 
-        // TODO: the following line causes:
-        // Fatal Python error: PyEval_SaveThread: NULL tstate
-        AcquireGIL gil = AcquireGIL();
+        // Hopefully fixes:
+        // - seg fault on Ubuntu without ReleaseGIL
+        // - seg fault on Anything else with ReleaseGIL
+        if (PyGILState_Check()) {
+            ReleaseGIL gil = ReleaseGIL();
+        } else {
+            AcquireGIL gil = AcquireGIL();
+        }
         this->pyState = new GameStatePython();
 
         this->pyState->number = this->state->number;
