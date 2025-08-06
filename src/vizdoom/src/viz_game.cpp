@@ -459,13 +459,9 @@ void VIZ_GameStateUpdateLabels(){
                 if (strncmp(vizLabel->objectName, "Dead", 4) == 0) {
                     // Align with the behavior of VIZ_CopyActorName
                     strncpy(vizLabel->objectCategory, "Gore", VIZ_MAX_NAME_LEN);
-                } else if (strncmp(vizLabel->objectName, "DoomPlayer", 10) == 0) {
+                } else if (sprite.actor == VIZ_PLAYER.mo) {
                     // Detect whether this object is current player
-                    if (sprite.actor == VIZ_PLAYER.mo) {
-                        strncpy(vizLabel->objectCategory, "Self", VIZ_MAX_NAME_LEN);
-                    } else {
-                        strncpy(vizLabel->objectCategory, "Player", VIZ_MAX_NAME_LEN);
-                    }
+                    strncpy(vizLabel->objectCategory, "Self", VIZ_MAX_NAME_LEN);
                 } else {
                     // Convert to lowercase for lookup since the mapping uses casefolded names
                     std::string className = sprite.actor->GetClass()->TypeName.GetChars();
