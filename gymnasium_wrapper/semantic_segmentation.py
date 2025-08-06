@@ -176,7 +176,7 @@ def semseg(
     for obj in state.labels:
         buffer[raw_buffer == obj.value] = label_def_[obj.object_category]
 
-    return buffer
+    return buffer.reshape((*raw_buffer.shape, 1))
 
 
 def semseg_rgb(
