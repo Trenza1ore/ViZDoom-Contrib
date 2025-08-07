@@ -22,7 +22,7 @@ from stable_baselines3.common.env_util import make_vec_env
 import vizdoom.gymnasium_wrapper  # noqa
 
 
-DEFAULT_ENV = "VizdoomBasic-v0"
+DEFAULT_ENV = "VizdoomBasic-v1"
 AVAILABLE_ENVS = [env for env in gymnasium.envs.registry.keys() if "Vizdoom" in env]  # type: ignore
 # Height and width of the resized image
 IMAGE_SHAPE = (60, 80)
@@ -53,7 +53,6 @@ class ObservationWrapper(gymnasium.ObservationWrapper):
         super().__init__(env)
         self.image_shape = shape
         self.image_shape_reverse = shape[::-1]
-        self.env.frame_skip = FRAME_SKIP
 
         # Create new observation space with the new shape
         print(env.observation_space)
@@ -79,14 +78,22 @@ def main(args):
         env = gymnasium.wrappers.TransformReward(env, lambda r: r * 0.01)
         return env
 
-    envs = make_vec_env(args.env, n_envs=N_ENVS, wrapper_class=wrap_env)
+    envs = make_vec_env(
+        args.env,
+        n_envs=N_ENVS,
+        wrapper_class=wrap_env,
+        env_kwargs=dict(frame_skip=FRAME_SKIP),
+    )
 
     agent = PPO("CnnPolicy", envs, n_steps=N_STEPS, verbose=1)
 
     # Do the actual learning
     # This will print out the results in the console.
     # If agent gets better, "ep_rew_mean" should increase steadily
-    agent.learn(total_timesteps=TRAINING_TIMESTEPS)
+    try:
+        agent.learn(total_timesteps=TRAINING_TIMESTEPS, progress_bar=True)
+    except ImportError:
+        agent.learn(total_timesteps=TRAINING_TIMESTEPS)
 
 
 if __name__ == "__main__":

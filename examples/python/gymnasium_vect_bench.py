@@ -23,9 +23,9 @@ n_steps = 1000
 
 if __name__ == "__main__":
 
-    # Pick an environment VizdoomCorridor-v0
+    # Pick an environment VizdoomCorridor-v1
     envs = gymnasium.make_vec(
-        "VizdoomCorridor-v0", num_envs=args.n_envs, vectorization_mode=args.mode
+        "VizdoomCorridor-v1", num_envs=args.n_envs, vectorization_mode=args.mode
     )
 
     # Time it
