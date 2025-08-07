@@ -39,6 +39,8 @@
 #include "p_acs.h"
 #include "p_setup.h"
 
+#include <algorithm>
+
 EXTERN_CVAR (Int, viz_debug)
 EXTERN_CVAR (Bool, viz_nocheat)
 EXTERN_CVAR (Int, viz_screen_format)
