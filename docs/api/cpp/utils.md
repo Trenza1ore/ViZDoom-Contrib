@@ -107,11 +107,11 @@ Note: added in 1.3.0.
 
 
 ---
-### `getDefaultCategoryToClasses`
+### `getDefaultCategoryMapping`
 
-| C++    | `std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryToClasses()` |
-| :--    | :--                                                                                              |
-| Python | `get_default_category_to_classes() -> dict[str, set[str]]`                                       |
+| C++    | `std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryMapping()` |
+| :--    | :--                                                                                            |
+| Python | `get_default_category_mapping() -> dict[str, set[str]]`                                         |
 
 Returns the default category-to-classes mapping.
 This mapping shows which classes belong to each category in the default classification system.

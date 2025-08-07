@@ -907,13 +907,13 @@ The class name should be lowercase.
 
 Note: added in 1.3.0.)DOCSTRING";
 
-    const char *getCategoryToClasses = R"DOCSTRING(Returns the current category-to-classes mapping.
+    const char *getCategoryMapping = R"DOCSTRING(Returns the current category-to-classes mapping.
 This mapping shows which classes belong to each category in the current classification system.
 The class names are lowercase.
 
 Note: added in 1.3.0.)DOCSTRING";
 
-    const char *getClassToCategory = R"DOCSTRING(Returns the current class-to-category mapping.
+    const char *getCategoryInverseMapping = R"DOCSTRING(Returns the current class-to-category mapping.
 This mapping shows which category each class belongs to in the current classification system.
 The mapping is a dictionary with lowercase class names as keys and category names as values.
 
@@ -935,7 +935,7 @@ The class names are lowercase.
 
 Note: added in 1.3.0.)DOCSTRING";
 
-    const char *getDefaultCategoryToClasses = R"DOCSTRING(Returns the default category-to-classes mapping.
+    const char *getDefaultCategoryMapping = R"DOCSTRING(Returns the default category-to-classes mapping.
 This mapping shows which classes belong to each category in the default classification system.
 The class names are lowercase.
 

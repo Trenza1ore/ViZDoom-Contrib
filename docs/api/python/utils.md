@@ -30,5 +30,5 @@ They mostly help to deal with conversion of Doom's engine types.
 
 ```{eval-rst}
 .. autofunction:: vizdoom.get_all_doom_classes
-.. autofunction:: vizdoom.get_default_category_to_classes
+.. autofunction:: vizdoom.get_default_category_mapping
 ```

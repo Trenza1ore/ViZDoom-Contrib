@@ -776,8 +776,8 @@ PYBIND11_MODULE(vizdoom, vz){
 
         CLASS_FUNC_2_PYT_WITH_ARGS("set_category_mapping", DoomGamePython::setCategoryMapping, pyb::arg("category_to_classes"))
         CLASS_FUNC_2_PYT_WITH_ARGS("get_category_for_class", DoomGamePython::getCategoryForClass, pyb::arg("class_name"))
-        CLASS_FUNC_2_PYT("get_category_to_classes", DoomGamePython::getCategoryToClasses)
-        CLASS_FUNC_2_PYT("get_class_to_category", DoomGamePython::getClassToCategory)
+        CLASS_FUNC_2_PYT("get_category_mapping", DoomGamePython::getCategoryMapping)
+        CLASS_FUNC_2_PYT("get_category_inverse_mapping", DoomGamePython::getCategoryInverseMapping)
 
         CLASS_FUNC_2_PYT("get_screen_width", DoomGamePython::getScreenWidth)
         CLASS_FUNC_2_PYT("get_screen_height", DoomGamePython::getScreenHeight)
@@ -805,6 +805,6 @@ PYBIND11_MODULE(vizdoom, vz){
     /*----------------------------------------------------------------------------------------------------------------*/
 
     vz.def("get_all_doom_classes", getAllDoomClasses, pyb::doc(docstrings::getAllDoomClasses));
-    vz.def("get_default_category_to_classes", getDefaultCategoryToClasses, pyb::doc(docstrings::getDefaultCategoryToClasses));
+    vz.def("get_default_category_mapping", getDefaultCategoryMapping, pyb::doc(docstrings::getDefaultCategoryMapping));
 
 }

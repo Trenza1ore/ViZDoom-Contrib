@@ -834,15 +834,15 @@ namespace vizdoom {
         return "Unknown";
     }
 
-    std::unordered_map<std::string, std::unordered_set<std::string>> DoomGame::getCategoryToClasses() {
+    std::unordered_map<std::string, std::unordered_set<std::string>> DoomGame::getCategoryMapping() {
         if (!this->customCategoryToClasses.empty()) {
             return this->customCategoryToClasses;
         } else {
-            return vizdoom::getDefaultCategoryToClasses();
+            return vizdoom::getDefaultCategoryMapping();
         }
     }
 
-    std::unordered_map<std::string, std::string> DoomGame::getClassToCategory() {
+    std::unordered_map<std::string, std::string> DoomGame::getCategoryInverseMapping() {
         if (!this->customClassToCategory.empty()) {
             return this->customClassToCategory;
         } else {

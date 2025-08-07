@@ -1973,11 +1973,11 @@ Note: added in 1.3.0.
 
 
 ---
-### `getCategoryToClasses`
+### `getCategoryMapping`
 
-| C++    | `std::unordered_map<std::string, std::unordered_set<std::string>> getCategoryToClasses()` |
-| :--    | :--                                                                                      |
-| Python | `get_category_to_classes() -> dict[str, set[str]]`                                       |
+| C++    | `std::unordered_map<std::string, std::unordered_set<std::string>> getCategoryMapping()` |
+| :--    | :--                                                                                    |
+| Python | `get_category_mapping() -> dict[str, set[str]]`                                         |
 
 Returns the current category-to-classes mapping.
 This mapping shows which classes belong to each category in the current classification system.
@@ -1988,11 +1988,11 @@ Note: added in 1.3.0.
 
 
 ---
-### `getClassToCategory`
+### `getCategoryInverseMapping`
 
-| C++    | `std::unordered_map<std::string, std::string> getClassToCategory()` |
-| :--    | :--                                                                 |
-| Python | `get_class_to_category() -> dict[str, str]`                          |
+| C++    | `std::unordered_map<std::string, std::string> getCategoryInverseMapping()` |
+| :--    | :--                                                                       |
+| Python | `get_category_inverse_mapping() -> dict[str, str]`                        |
 
 Returns the current class-to-category mapping.
 This mapping shows which category each class belongs to in the current classification system.

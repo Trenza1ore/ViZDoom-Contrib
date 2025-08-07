@@ -210,8 +210,8 @@ namespace vizdoom {
         return DoomGame::getCategoryForClass(className);
     }
 
-    pyb::dict DoomGamePython::getCategoryToClasses() {
-        auto mapping = DoomGame::getCategoryToClasses();
+    pyb::dict DoomGamePython::getCategoryMapping() {
+        auto mapping = DoomGame::getCategoryMapping();
         pyb::dict pyDict;
         for (const auto& categoryPair : mapping) {
             const std::string& category = categoryPair.first;
@@ -226,8 +226,8 @@ namespace vizdoom {
         return pyDict;
     }
 
-    pyb::dict DoomGamePython::getClassToCategory() {
-        auto mapping = DoomGame::getClassToCategory();
+    pyb::dict DoomGamePython::getCategoryInverseMapping() {
+        auto mapping = DoomGame::getCategoryInverseMapping();
         pyb::dict pyDict;
         for (const auto& classPair : mapping) {
             pyDict[pyb::str(classPair.first)] = classPair.second;

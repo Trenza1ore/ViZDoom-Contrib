@@ -287,7 +287,7 @@ namespace vizdoom {
         return allDoomClasses;
     }
 
-    std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryToClasses() {
+    std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryMapping() {
         return categoryToClasses;
     }
 }

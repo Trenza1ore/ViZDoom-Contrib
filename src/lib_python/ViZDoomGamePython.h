@@ -120,8 +120,8 @@ namespace vizdoom {
         std::string getCategoryForClass(std::string const &className);
 
         // Default Doom class mappings (read-only)
-        pyb::dict getCategoryToClasses();
-        pyb::dict getClassToCategory();
+        pyb::dict getCategoryMapping();
+        pyb::dict getCategoryInverseMapping();
 
         // These functions are wrapped for manual GIL management
         void init();

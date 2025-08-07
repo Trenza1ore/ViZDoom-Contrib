@@ -20,6 +20,7 @@ import resource
 from argparse import ArgumentParser
 
 import gymnasium
+import psutil
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.env_util import make_vec_env
@@ -142,13 +143,10 @@ def main(args):
         )
         agent.learn(total_timesteps=TRAINING_TIMESTEPS, callback=eval_callback)
 
+    agent.save("ppo_model.zip")
+
 
 if __name__ == "__main__":
-    if platform.system().lower() != "windows":
-        initial_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    else:
-        initial_memory = 0
-
     parser = ArgumentParser(
         "Train stable-baselines3 PPO agents on ViZDoom via Semantic Segmentation."
     )
@@ -166,18 +164,15 @@ if __name__ == "__main__":
         help="Buffer compression option",
     )
     args = parser.parse_args()
-    main(args)
 
-    if platform.system().lower() == "windows":
-        try:
-            import psutil
-
-            peak_memory_usage = psutil.Process().memory_info().peak_wset / 1024 / 1024
-        except ImportError:
-            peak_memory_usage = -1
-    else:
+    if platform.system().lower() != "windows":
+        initial_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        main(args)
         final_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
         peak_memory_usage = (final_memory - initial_memory) / 1024
         if platform.system().lower() == "macos":
             peak_memory_usage /= 1024
+    else:
+        main(args)
+        peak_memory_usage = psutil.Process().memory_info().peak_wset / 1024 / 1024
     print(f"Peak Memory Usage: {round(peak_memory_usage)}MB")
