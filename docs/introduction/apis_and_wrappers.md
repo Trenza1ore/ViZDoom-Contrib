@@ -35,7 +35,7 @@ and implements the necessary API to function as a Gymnasium API.
 
 See the following examples for use:
 - [examples/python/gymnasium_wrapper.py](https://github.com/Farama-Foundation/ViZDoom/tree/master/examples/python/gymnasium_wrapper.py) for basic usage
-- [examples/python/learning_stable_baselines.py](https://github.com/Farama-Foundation/ViZDoom/tree/master/examples/python/learning_stable_baselines.py) for example training with [stable-baselines3](https://github.com/DLR-RM/stable-baselines3/).
+- [examples/python/learning_stable_baselines.py](https://github.com/Farama-Foundation/ViZDoom/tree/master/examples/python/learning_stable_baselines3.py) for example training with [stable-baselines3](https://github.com/DLR-RM/stable-baselines3/).
 
 
 ## OpenAI Gym wrappers
