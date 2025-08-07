@@ -33,9 +33,8 @@ AVAILABLE_ENVS = [env for env in gymnasium.envs.registry.keys() if "Vizdoom" in 
 
 # Training parameters
 TRAINING_TIMESTEPS = int(4e6)
-N_STEPS = 4096
 N_ENVS = 4
-BATCH_SIZE = 32
+N_EPOCH = 3
 L_RATE = 1e-3
 FRAME_SKIP = 4
 
@@ -108,8 +107,7 @@ def main(args):
             "CnnPolicy",
             envs,
             learning_rate=L_RATE,
-            n_steps=N_STEPS,
-            batch_size=BATCH_SIZE,
+            n_epochs=N_EPOCH,
             rollout_buffer_class=CompressedRolloutBuffer,
             rollout_buffer_kwargs=dict(
                 compression_method=args.compress, dtypes=buffer_dtypes
@@ -122,13 +120,12 @@ def main(args):
             "CnnPolicy",
             envs,
             learning_rate=L_RATE,
-            n_steps=N_STEPS,
-            batch_size=BATCH_SIZE,
+            n_epochs=N_EPOCH,
             policy_kwargs=dict(normalize_images=False),
             verbose=1,
         )
 
-    eval_callback = EvalCallback(eval_envs, n_eval_episodes=10)
+    eval_callback = EvalCallback(eval_envs, n_eval_episodes=10, eval_freq=8192 * N_ENVS)
 
     # Do the actual learning
     # This will print out the results in the console.
