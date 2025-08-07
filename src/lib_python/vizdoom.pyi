@@ -2036,6 +2036,8 @@ class Label:
     @property
     def object_angle(self) -> float: ...
     @property
+    def object_category(self) -> str: ...
+    @property
     def object_id(self) -> int: ...
     @property
     def object_name(self) -> str: ...
@@ -2546,6 +2548,15 @@ def doom_tics_to_sec(doom_tics: float, fps: int = 35) -> float:
     Calculates how many tics will be made during given number of seconds.
 
     Note: added in 1.1.0
+    """
+
+def get_default_category_mapping() -> dict[str, set[str]]:
+    """
+    Returns the default category-to-classes mapping.
+    This mapping shows which classes belong to each category in the default classification system.
+    The class names are lowercase.
+
+    Note: added in 1.3.0.
     """
 
 def is_binary_button(button: Button) -> bool:
