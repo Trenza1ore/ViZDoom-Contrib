@@ -228,7 +228,6 @@ namespace vizdoom {
         std::string getCategoryForClass(const std::string& className);
 
         // Get Doom class mappings (read-only)
-        std::unordered_set<std::string> getAllDoomClasses();
         std::unordered_map<std::string, std::unordered_set<std::string>> getCategoryToClasses();
         std::unordered_map<std::string, std::string> getClassToCategory();
 

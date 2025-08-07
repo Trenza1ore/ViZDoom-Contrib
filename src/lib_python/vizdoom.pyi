@@ -301,14 +301,6 @@ class DoomGame:
         The game can be initialized again after being closed.
         """
 
-    def get_all_doom_classes(self) -> set:
-        """
-        Returns a set of all available Doom class names.
-        This includes all classes that can appear in the game, regardless of whether they are currently visible.
-
-        Note: added in 1.3.0.
-        """
-
     def get_armor_reward(self) -> float:
         """
         Returns the reward granted to the player for getting armor points.
@@ -379,6 +371,7 @@ class DoomGame:
         Returns the category for a given class name.
         If a custom category mapping is set, only the custom mapping will be used.
         Otherwise, the default category mapping will be used.
+        The class name should be lowercase.
 
         Note: added in 1.3.0.
         """
@@ -387,6 +380,7 @@ class DoomGame:
         """
         Returns the current category-to-classes mapping.
         This mapping shows which classes belong to each category in the current classification system.
+        The class names are lowercase.
 
         Note: added in 1.3.0.
         """
@@ -395,6 +389,7 @@ class DoomGame:
         """
         Returns the current class-to-category mapping.
         This mapping shows which category each class belongs to in the current classification system.
+        The mapping is a dictionary with lowercase class names as keys and category names as values.
 
         Note: added in 1.3.0.
         """
@@ -978,6 +973,7 @@ class DoomGame:
         Sets a custom category mapping for object classification.
         When a custom mapping is set, it completely replaces the default category mapping.
         Objects not included in the custom mapping will be categorized as "Unknown".
+        The mapping is a dictionary with category names as keys and set of lowercase class names as values.
 
         Note: added in 1.3.0.
         """
@@ -2592,6 +2588,24 @@ def doom_tics_to_sec(doom_tics: float, fps: int = 35) -> float:
     Calculates how many tics will be made during given number of seconds.
 
     Note: added in 1.1.0
+    """
+
+def get_all_doom_classes() -> set[str]:
+    """
+    Returns a set of all available Doom class names.
+    This includes all classes that can appear in the game, regardless of whether they are currently visible.
+    The class names are lowercase.
+
+    Note: added in 1.3.0.
+    """
+
+def get_default_category_to_classes() -> dict[str, set[str]]:
+    """
+    Returns the default category-to-classes mapping.
+    This mapping shows which classes belong to each category in the default classification system.
+    The class names are lowercase.
+
+    Note: added in 1.3.0.
     """
 
 def is_binary_button(button: Button) -> bool:

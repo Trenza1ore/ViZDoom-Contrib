@@ -907,12 +907,6 @@ The class name should be lowercase.
 
 Note: added in 1.3.0.)DOCSTRING";
 
-    const char *getAllDoomClasses = R"DOCSTRING(Returns a set of all available Doom class names.
-This includes all classes that can appear in the game, regardless of whether they are currently visible.
-The class names are lowercase.
-
-Note: added in 1.3.0.)DOCSTRING";
-
     const char *getCategoryToClasses = R"DOCSTRING(Returns the current category-to-classes mapping.
 This mapping shows which classes belong to each category in the current classification system.
 The class names are lowercase.
@@ -934,6 +928,18 @@ Note: changed in 1.1.0)DOCSTRING";
     const char *msToDoomTics = R"DOCSTRING(Calculates the number of milliseconds that will pass during specified number of tics.
 
 Note: changed in 1.1.0)DOCSTRING";
+
+    const char *getAllDoomClasses = R"DOCSTRING(Returns a set of all available Doom class names.
+This includes all classes that can appear in the game, regardless of whether they are currently visible.
+The class names are lowercase.
+
+Note: added in 1.3.0.)DOCSTRING";
+
+    const char *getDefaultCategoryToClasses = R"DOCSTRING(Returns the default category-to-classes mapping.
+This mapping shows which classes belong to each category in the default classification system.
+The class names are lowercase.
+
+Note: added in 1.3.0.)DOCSTRING";
 
     const char *doomTicsToSec = R"DOCSTRING(Calculates how many tics will be made during given number of seconds.
 

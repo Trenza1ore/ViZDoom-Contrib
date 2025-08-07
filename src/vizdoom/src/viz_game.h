@@ -71,6 +71,10 @@ struct VIZPlayerLogger{
 extern unsigned int vizUniqueObjectsCount;
 extern VIZPlayerLogger vizPlayerLogger[VIZ_MAX_PLAYERS];
 
+// Custom category mapping
+extern std::unordered_map<std::string, std::string> vizCustomClassToCategory;
+extern bool vizUseCustomCategories;
+
 void VIZ_LogDmg(AActor *target, AActor *inflictor, AActor *source, int damage);
 
 // All these structures should reflect structures in src/lib/ViZDoomSharedMemory.h
@@ -239,8 +243,7 @@ void VIZ_GameStateClose();
 
 void VIZ_PrintPlayers();
 
-void VIZ_SetCustomCategoryMapping(const std::unordered_map<std::string, std::unordered_set<std::string>>& categoryToClasses);
-
-void VIZ_ClearCustomCategoryMapping();
+void VIZ_ClearCustomCategories();
+void VIZ_AddCustomCategory(const char* className, const char* category);
 
 #endif

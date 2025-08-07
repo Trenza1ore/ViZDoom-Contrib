@@ -351,6 +351,21 @@ namespace vizdoom {
             this->MQDoom->send(MSG_CODE_COMMAND, command.c_str());
     }
 
+    void DoomController::sendCategoryMapping(const std::unordered_map<std::string, std::string>& classToCategory) {
+        if (this->doomRunning && this->MQDoom) {
+            // Clear any existing custom mapping first
+            this->sendCommand("viz_clear_custom_categories");
+
+            // Send each class-category pair
+            for (const auto& pair : classToCategory) {
+                std::string command = "viz_add_custom_category " + pair.first + " " + pair.second;
+                if (command.length() <= MQ_MAX_CMD_LEN) {
+                    this->sendCommand(command);
+                }
+            }
+        }
+    }
+
     void DoomController::addCustomArg(std::string arg) {
         this->customArgs.push_back(arg);
     }

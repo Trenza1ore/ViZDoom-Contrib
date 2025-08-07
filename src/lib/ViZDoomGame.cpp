@@ -96,6 +96,11 @@ namespace vizdoom {
                     this->doomController->setButtonAvailable(this->availableButtons[i], true);
                 }
 
+                // Send custom category mapping if set
+                if (!this->customClassToCategory.empty()) {
+                    this->doomController->sendCategoryMapping(this->customClassToCategory);
+                }
+
                 this->resetState();
             }
             catch (...) { throw; }
@@ -799,6 +804,11 @@ namespace vizdoom {
                 this->customClassToCategory[className] = category;
             }
         }
+
+        // Send the custom mapping to the Doom engine if it's running
+        if (this->isRunning()) {
+            this->doomController->sendCategoryMapping(this->customClassToCategory);
+        }
     }
 
     std::string DoomGame::getCategoryForClass(const std::string& className) {
@@ -824,15 +834,11 @@ namespace vizdoom {
         return "Unknown";
     }
 
-    std::unordered_set<std::string> DoomGame::getAllDoomClasses() {
-        return allDoomClasses;
-    }
-
     std::unordered_map<std::string, std::unordered_set<std::string>> DoomGame::getCategoryToClasses() {
         if (!this->customCategoryToClasses.empty()) {
             return this->customCategoryToClasses;
         } else {
-            return categoryToClasses;
+            return vizdoom::getDefaultCategoryToClasses();
         }
     }
 

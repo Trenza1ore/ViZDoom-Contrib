@@ -776,7 +776,6 @@ PYBIND11_MODULE(vizdoom, vz){
 
         CLASS_FUNC_2_PYT_WITH_ARGS("set_category_mapping", DoomGamePython::setCategoryMapping, pyb::arg("category_to_classes"))
         CLASS_FUNC_2_PYT_WITH_ARGS("get_category_for_class", DoomGamePython::getCategoryForClass, pyb::arg("class_name"))
-        CLASS_FUNC_2_PYT("get_all_doom_classes", DoomGamePython::getAllDoomClasses)
         CLASS_FUNC_2_PYT("get_category_to_classes", DoomGamePython::getCategoryToClasses)
         CLASS_FUNC_2_PYT("get_class_to_category", DoomGamePython::getClassToCategory)
 
@@ -801,5 +800,11 @@ PYBIND11_MODULE(vizdoom, vz){
     vz.def("doom_fixed_to_float", doomFixedToDouble_double, docstrings::doomFixedToDouble, pyb::arg("doom_fixed"));
     FUNC_2_PYT_WITH_ARGS("is_binary_button", isBinaryButton, pyb::arg("button"));
     FUNC_2_PYT_WITH_ARGS("is_delta_button", isDeltaButton, pyb::arg("button"));
+
+    /* Doom class utilities */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    vz.def("get_all_doom_classes", getAllDoomClasses, pyb::doc(docstrings::getAllDoomClasses));
+    vz.def("get_default_category_to_classes", getDefaultCategoryToClasses, pyb::doc(docstrings::getDefaultCategoryToClasses));
 
 }

@@ -210,15 +210,6 @@ namespace vizdoom {
         return DoomGame::getCategoryForClass(className);
     }
 
-    pyb::set DoomGamePython::getAllDoomClasses() {
-        auto classes = DoomGame::getAllDoomClasses();
-        pyb::set pySet;
-        for (const auto& className : classes) {
-            pySet.add(className);
-        }
-        return pySet;
-    }
-
     pyb::dict DoomGamePython::getCategoryToClasses() {
         auto mapping = DoomGame::getCategoryToClasses();
         pyb::dict pyDict;

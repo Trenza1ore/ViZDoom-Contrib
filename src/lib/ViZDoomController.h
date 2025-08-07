@@ -108,6 +108,7 @@ namespace vizdoom {
         void respawnPlayer();
         bool isDoomRunning();
         void sendCommand(std::string command);
+        void sendCategoryMapping(const std::unordered_map<std::string, std::string>& classToCategory);
 
         void setTicrate(unsigned int ticrate);
         unsigned int getTicrate();

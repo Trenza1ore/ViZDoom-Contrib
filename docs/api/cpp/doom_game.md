@@ -1973,20 +1973,6 @@ Note: added in 1.3.0.
 
 
 ---
-### `getAllDoomClasses`
-
-| C++    | `std::unordered_set<std::string> getAllDoomClasses()` |
-| :--    | :--                                                   |
-| Python | `get_all_doom_classes() -> set[str]`                   |
-
-Returns a set of all available Doom class names.
-This includes all classes that can appear in the game, regardless of whether they are currently visible.
-The class names are lowercase.
-
-Note: added in 1.3.0.
-
-
----
 ### `getCategoryToClasses`
 
 | C++    | `std::unordered_map<std::string, std::unordered_set<std::string>> getCategoryToClasses()` |
@@ -1995,6 +1981,7 @@ Note: added in 1.3.0.
 
 Returns the current category-to-classes mapping.
 This mapping shows which classes belong to each category in the current classification system.
+If a custom category mapping is set, it returns the custom mapping. Otherwise, it returns the default mapping.
 The class names are lowercase.
 
 Note: added in 1.3.0.

@@ -57,6 +57,10 @@ VIZGameState *vizGameStateSM = NULL;
 VIZPlayerLogger vizPlayerLogger[VIZ_MAX_PLAYERS];
 unsigned int vizUniqueObjectsCount = 0;
 
+// Custom category mapping
+std::unordered_map<std::string, std::string> vizCustomClassToCategory;
+bool vizUseCustomCategories = false;
+
 /* Logger functions */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -416,7 +420,7 @@ void VIZ_GameStateUpdateVariables(){
                 ++vizGameStateSM->PLAYER_COUNT;
                 vizGameStateSM->PLAYER_N_IN_GAME[i] = true;
                 strncpy(vizGameStateSM->PLAYER_N_NAME[i], players[i].userinfo.GetName(), MAXPLAYERNAME);
-                vizGameStateSM->PLAYER_N_NAME[i][MAXPLAYERNAME] = NULL;
+                vizGameStateSM->PLAYER_N_NAME[i][MAXPLAYERNAME] = '\0';
                 vizGameStateSM->PLAYER_N_FRAGCOUNT[i] = players[i].fragcount;
                 if(players[i].cmd.ucmd.buttons != 0)
                     vizGameStateSM->PLAYER_N_LAST_ACTION_TIC[i] = (unsigned int)gametic;
@@ -466,13 +470,25 @@ void VIZ_GameStateUpdateLabels(){
                     // Convert to lowercase for lookup since the mapping uses casefolded names
                     std::string className = sprite.actor->GetClass()->TypeName.GetChars();
                     std::transform(className.begin(), className.end(), className.begin(), tolower);
-                    auto categoryIt = classToCategory.find(className);
-                    if (categoryIt != classToCategory.end()) {
-                        strncpy(vizLabel->objectCategory, categoryIt->second.c_str(), VIZ_MAX_NAME_LEN);
+                    
+                    // Use custom category mapping if available, otherwise use default
+                    if (vizUseCustomCategories) {
+                        auto categoryIt = vizCustomClassToCategory.find(className);
+                        if (categoryIt != vizCustomClassToCategory.end()) {
+                            strncpy(vizLabel->objectCategory, categoryIt->second.c_str(), VIZ_MAX_NAME_LEN);
+                        } else {
+                            strncpy(vizLabel->objectCategory, "Unknown", VIZ_MAX_NAME_LEN);
+                        }
                     } else {
-                        strncpy(vizLabel->objectCategory, "Unknown", VIZ_MAX_NAME_LEN);
+                        auto categoryIt = classToCategory.find(className);
+                        if (categoryIt != classToCategory.end()) {
+                            strncpy(vizLabel->objectCategory, categoryIt->second.c_str(), VIZ_MAX_NAME_LEN);
+                        } else {
+                            strncpy(vizLabel->objectCategory, "Unknown", VIZ_MAX_NAME_LEN);
+                        }
                     }
                 }
+                vizLabel->objectCategory[VIZ_MAX_NAME_LEN-1] = '\0';  // Safe-guard against long category names
 
                 if(sprite.minX >= vizGameStateSM->SCREEN_WIDTH) sprite.minX = vizGameStateSM->SCREEN_WIDTH - 1;
                 if(sprite.minY >= vizGameStateSM->SCREEN_HEIGHT) sprite.minY = vizGameStateSM->SCREEN_HEIGHT - 1;
@@ -626,4 +642,36 @@ void VIZ_PrintPlayers(){
                    vizPlayerLogger[i].dmgCount, vizPlayerLogger[i].hitCount);
         }
     }
+}
+
+// Custom category mapping command handlers
+void VIZ_ClearCustomCategories() {
+    vizCustomClassToCategory.clear();
+    vizUseCustomCategories = false;
+    VIZ_DebugMsg(1, VIZ_FUNC, "Cleared custom category mapping");
+}
+
+void VIZ_AddCustomCategory(const char* className, const char* category) {
+    if (className && category) {
+        std::string classNameStr = className;
+        std::transform(classNameStr.begin(), classNameStr.end(), classNameStr.begin(), tolower);
+        vizCustomClassToCategory[classNameStr] = category;
+        vizUseCustomCategories = true;
+        VIZ_DebugMsg(1, VIZ_FUNC, "Added custom category: %s -> %s", className, category);
+    }
+}
+
+// Command registrations
+CCMD (viz_clear_custom_categories)
+{
+    VIZ_ClearCustomCategories();
+}
+
+CCMD (viz_add_custom_category)
+{
+    if (argv.argc() != 3) {
+        Printf("Usage: viz_add_custom_category <class_name> <category>\n");
+        return;
+    }
+    VIZ_AddCustomCategory(argv[1], argv[2]);
 }

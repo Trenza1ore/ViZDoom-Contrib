@@ -22,6 +22,7 @@
 */
 
 #include "ViZDoomUtilities.h"
+#include "../vizdoom/src/viz_doom_classes.h"
 
 namespace vizdoom {
 
@@ -277,5 +278,16 @@ namespace vizdoom {
 
     bool isDeltaButton(Button button) {
         return button >= BINARY_BUTTON_COUNT && button < BUTTON_COUNT;
+    }
+
+    /* Doom class helpers */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    std::unordered_set<std::string> getAllDoomClasses() {
+        return allDoomClasses;
+    }
+
+    std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryToClasses() {
+        return categoryToClasses;
     }
 }

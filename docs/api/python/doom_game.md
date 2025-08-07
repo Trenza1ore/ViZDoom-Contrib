@@ -187,7 +187,6 @@ DoomGame is the main object of the ViZDoom library, representing a single instan
 ```{eval-rst}
 .. autofunction:: vizdoom.DoomGame.set_category_mapping
 .. autofunction:: vizdoom.DoomGame.get_category_for_class
-.. autofunction:: vizdoom.DoomGame.get_all_doom_classes
 .. autofunction:: vizdoom.DoomGame.get_category_to_classes
 .. autofunction:: vizdoom.DoomGame.get_class_to_category
 ```
