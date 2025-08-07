@@ -1,4 +1,5 @@
 import os
+from typing import Literal, Optional
 
 from gymnasium.utils import EzPickle
 
@@ -16,9 +17,15 @@ class VizdoomScenarioEnv(VizdoomEnv, EzPickle):
         max_buttons_pressed=1,
         render_mode=None,
         treat_episode_timeout_as_truncation=True,
+        semantic_classes: Optional[tuple[str, Literal["label", "rgb"]]] = None,
     ):
         EzPickle.__init__(
-            self, scenario_config_file, frame_skip, max_buttons_pressed, render_mode
+            self,
+            scenario_config_file,
+            frame_skip,
+            max_buttons_pressed,
+            render_mode,
+            semantic_classes,
         )
         super().__init__(
             os.path.join(scenarios_path, scenario_config_file),
@@ -26,4 +33,5 @@ class VizdoomScenarioEnv(VizdoomEnv, EzPickle):
             max_buttons_pressed,
             render_mode,
             treat_episode_timeout_as_truncation=treat_episode_timeout_as_truncation,
+            semantic_classes=semantic_classes,
         )
