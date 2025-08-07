@@ -124,6 +124,8 @@ class ViZDoomStubGenerator:
         if os.path.exists(stub_file):
             with open(stub_file, "r") as f:
                 content = f.read().removeprefix('"""\nViZDoom Python module.\n"""\n')
+            # Remove exact value of __version__ from the stub to avoid misguiding the user
+            content = re.sub(r"^(__version__: str).*$", r"\1", content, count=1, flags=re.MULTILINE)
             return content
         else:
             raise FileNotFoundError(
