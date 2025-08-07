@@ -86,7 +86,8 @@ The main changes include/will include:
 - The update of Gymnasium environments to the latest Gymnasium API, and some minor improvements and bug fixes,
 - New version of the old environments and completely new environments,
 - New features including methods for easy setting of shaping reward, and natual language log of the game events,
-- Python 3.13 support.
+- Python 3.13 support,
+- Python type hinting support.
 
 To install the latest development version of ViZDoom, just run:
 ```sh
@@ -126,7 +127,7 @@ In this case, install the required dependencies using Homebrew:
 brew install cmake boost sdl2
 ```
 We recommend using at least macOS High Sierra 10.13+ with Python 3.8+.
-On Apple Silicon (M1, M2, and M3), make sure you are using Python/Pip for Apple Silicon.
+On Apple Silicon (M-series chips), make sure you are using Python/Pip for Apple Silicon.
 
 
 ### Windows
