@@ -40,6 +40,8 @@
 #include <boost/version.hpp>
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace vizdoom {
 
