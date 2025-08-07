@@ -23,6 +23,7 @@ ViZDoom is based on [ZDoom](https://zdoom.org) engine to provide the game mechan
 - Automatic labeling of game objects visible in the frame,
 - Access to the audio buffer (),
 - Access to the list of actors/objects and map geometry,
+- Access to category information of on-screen objects (semantic segmentation),
 - Off-screen rendering,
 - Episodes recording,
 - In-game time scaling in async mode.
@@ -86,7 +87,8 @@ The main changes include/will include:
 - The update of Gymnasium environments to the latest Gymnasium API, and some minor improvements and bug fixes,
 - New version of the old environments and completely new environments,
 - New features including methods for easy setting of shaping reward, and natual language log of the game events,
-- Python 3.13 support.
+- Python 3.13 support,
+- Python type hinting support.
 
 To install the latest development version of ViZDoom, just run:
 ```sh
@@ -126,7 +128,7 @@ In this case, install the required dependencies using Homebrew:
 brew install cmake boost sdl2
 ```
 We recommend using at least macOS High Sierra 10.13+ with Python 3.8+.
-On Apple Silicon (M1, M2, and M3), make sure you are using Python/Pip for Apple Silicon.
+On Apple Silicon (M1, M2, M3 and M4), make sure you are using Python/Pip for Apple Silicon.
 
 
 ### Windows
