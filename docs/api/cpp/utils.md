@@ -89,3 +89,19 @@ Returns true if [`Button`](./enums.md#button) is binary button.
 | Python | `is_delta_button(button: Button) -> bool` |
 
 Returns true if [`Button`](./enums.md#button) is delta button.
+
+
+## Category functions
+
+---
+### `getDefaultCategoryMapping`
+
+| C++    | `std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryMapping()` |
+| :--    | :--                                                                                            |
+| Python | `get_default_category_mapping() -> dict[str, set[str]]`                                         |
+
+Returns the default category-to-classes mapping.
+This mapping shows which classes belong to each category in the default classification system.
+The class names are lowercase.
+
+Note: added in 1.3.0.

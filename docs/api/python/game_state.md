@@ -29,6 +29,8 @@ See also:
 
 **object_name** - ingame object name, many different objects can have the same name (e.g. Medikit, Clip, Zombie).
 
+**object_category** - category of the object (e.g. "Monster", "Weapon", "Player"). Category "Self" is assigned to current player.
+
 **value** - value that represents this particular object in **labels_buffer**.
 
 **x**, **y**, **width**, **height** - describes bounding box of this particular object in **labels_buffer**. Note: added in 1.1.5.

@@ -25,3 +25,9 @@ They mostly help to deal with conversion of Doom's engine types.
 .. autofunction:: vizdoom.is_binary_button
 .. autofunction:: vizdoom.is_delta_button
 ```
+
+## Category functions
+
+```{eval-rst}
+.. autofunction:: vizdoom.get_default_category_mapping
+```

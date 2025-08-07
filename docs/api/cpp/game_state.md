@@ -43,6 +43,7 @@ See also:
 
 - `unsigned int / int` **objectId / object_id**
 - `std::string / str` **objectName / object_name**
+- `std::string / str` **objectCategory / object_category**
 - `uint8_t / int` **value**
 - `unsigned int / int` **x**
 - `unsigned int / int` **y**
@@ -64,6 +65,8 @@ Description of the object in the labels buffer.
 **objectId / object_id** - unique object ID, if both Labels and Objects information is enabled, this will be the same as **id** in corresponding **Object**.
 
 **objectName / object_name** - ingame object name, many different objects can have the same name (e.g. Medikit, Clip, Zombie).
+
+**objectCategory / object_category** - category of the object (e.g. "Monster", "Weapon", "Player"). Category "Self" is assigned to current player.
 
 **value** - value that represents this particular object in **labelsBuffer**.
 
