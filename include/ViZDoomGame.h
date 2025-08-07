@@ -228,8 +228,8 @@ namespace vizdoom {
         std::string getCategoryForClass(const std::string& className);
 
         // Get Doom class mappings (read-only)
-        std::unordered_map<std::string, std::unordered_set<std::string>> getCategoryToClasses();
-        std::unordered_map<std::string, std::string> getClassToCategory();
+        std::unordered_map<std::string, std::unordered_set<std::string>> getCategoryMapping();
+        std::unordered_map<std::string, std::string> getCategoryInverseMapping();
 
         void setConsoleEnabled(bool console);
         void setSoundEnabled(bool sound);

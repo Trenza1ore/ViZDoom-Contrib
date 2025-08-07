@@ -75,7 +75,7 @@ namespace vizdoom {
     /*----------------------------------------------------------------------------------------------------------------*/
 
     std::unordered_set<std::string> getAllDoomClasses();
-    std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryToClasses();
+    std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryMapping();
 
 }
 

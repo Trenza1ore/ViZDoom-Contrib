@@ -376,20 +376,20 @@ class DoomGame:
         Note: added in 1.3.0.
         """
 
-    def get_category_to_classes(self) -> dict:
-        """
-        Returns the current category-to-classes mapping.
-        This mapping shows which classes belong to each category in the current classification system.
-        The class names are lowercase.
-
-        Note: added in 1.3.0.
-        """
-
-    def get_class_to_category(self) -> dict:
+    def get_category_inverse_mapping(self) -> dict:
         """
         Returns the current class-to-category mapping.
         This mapping shows which category each class belongs to in the current classification system.
         The mapping is a dictionary with lowercase class names as keys and category names as values.
+
+        Note: added in 1.3.0.
+        """
+
+    def get_category_mapping(self) -> dict:
+        """
+        Returns the current category-to-classes mapping.
+        This mapping shows which classes belong to each category in the current classification system.
+        The class names are lowercase.
 
         Note: added in 1.3.0.
         """
@@ -2599,7 +2599,7 @@ def get_all_doom_classes() -> set[str]:
     Note: added in 1.3.0.
     """
 
-def get_default_category_to_classes() -> dict[str, set[str]]:
+def get_default_category_mapping() -> dict[str, set[str]]:
     """
     Returns the default category-to-classes mapping.
     This mapping shows which classes belong to each category in the default classification system.

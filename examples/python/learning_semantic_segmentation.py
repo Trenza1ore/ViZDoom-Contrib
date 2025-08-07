@@ -65,13 +65,10 @@ class ObservationWrapper(gymnasium.ObservationWrapper):
 
 def main(args):
     # Create multiple environments: this speeds up training with PPO
-    # We apply two wrappers on the environment:
-    #  1) The above wrapper that modifies the observations (takes only the semantic segmentation buffer)
-    #  2) A reward scaling wrapper. Normally the scenarios use large magnitudes for rewards (e.g., 100, -100).
-    #     This may lead to unstable learning, and we scale the rewards by 1/100
+    # We apply one wrappers on the environment:
+    #  1) An ObservationWrapper that modifies the observations (takes only the semantic segmentation buffer)
     def wrap_env(env):
         env = ObservationWrapper(env)
-        env = gymnasium.wrappers.TransformReward(env, lambda r: r * 0.01)
         return env
 
     # Use SubprocVecEnv for multi-processing parallelism
