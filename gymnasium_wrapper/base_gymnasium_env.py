@@ -217,17 +217,17 @@ class VizdoomEnv(gym.Env, EzPickle):
         if self.state is not None:
             observation["screen"] = self.state.screen_buffer
             if self.channels == 1:
-                observation["screen"] = self.state.screen_buffer[..., None]
+                observation["screen"] = self.state.screen_buffer[..., None]  # type: ignore
             if self.depth:
-                observation["depth"] = self.state.depth_buffer[..., None]
+                observation["depth"] = self.state.depth_buffer[..., None]  # type: ignore
             if self.labels:
-                observation["labels"] = self.state.labels_buffer[..., None]
+                observation["labels"] = self.state.labels_buffer[..., None]  # type: ignore
             if self.automap:
                 observation["automap"] = self.state.automap_buffer
                 if self.channels == 1:
-                    observation["automap"] = self.state.automap_buffer[..., None]
+                    observation["automap"] = self.state.automap_buffer[..., None]  # type: ignore
             if self.num_game_variables > 0:
-                observation["gamevariables"] = self.state.game_variables.astype(
+                observation["gamevariables"] = self.state.game_variables.astype(  # type: ignore
                     np.float32
                 )
         else:
@@ -265,7 +265,7 @@ class VizdoomEnv(gym.Env, EzPickle):
 
         if self.depth:
             image_list.append(
-                np.repeat(game_state.depth_buffer[..., None], repeats=3, axis=2)
+                np.repeat(game_state.depth_buffer[..., None], repeats=3, axis=2)  # type: ignore
             )
 
         if self.labels:
@@ -282,7 +282,7 @@ class VizdoomEnv(gym.Env, EzPickle):
         if self.automap:
             automap_buffer = game_state.automap_buffer
             if self.channels == 1:
-                automap_buffer = np.repeat(automap_buffer[..., None], repeats=3, axis=2)
+                automap_buffer = np.repeat(automap_buffer[..., None], repeats=3, axis=2)  # type: ignore
             image_list.append(automap_buffer)
 
         return np.concatenate(image_list, axis=1)
