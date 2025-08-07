@@ -30,6 +30,7 @@
 #include "viz_buffers.h"
 #include "viz_shared_memory.h"
 #include "viz_version.h"
+#include "viz_doom_classes.h"
 
 #include "d_netinf.h"
 #include "d_event.h"
@@ -415,7 +416,7 @@ void VIZ_GameStateUpdateVariables(){
                 ++vizGameStateSM->PLAYER_COUNT;
                 vizGameStateSM->PLAYER_N_IN_GAME[i] = true;
                 strncpy(vizGameStateSM->PLAYER_N_NAME[i], players[i].userinfo.GetName(), MAXPLAYERNAME);
-                vizGameStateSM->PLAYER_N_NAME[i][MAXPLAYERNAME] = NULL;
+                vizGameStateSM->PLAYER_N_NAME[i][MAXPLAYERNAME] = '\0';
                 vizGameStateSM->PLAYER_N_FRAGCOUNT[i] = players[i].fragcount;
                 if(players[i].cmd.ucmd.buttons != 0)
                     vizGameStateSM->PLAYER_N_LAST_ACTION_TIC[i] = (unsigned int)gametic;
@@ -453,6 +454,27 @@ void VIZ_GameStateUpdateLabels(){
                 vizLabel->objectId = VIZ_GetActorId(sprite.actor);
                 vizLabel->value = sprite.label;
                 VIZ_CopyActorName(sprite.actor, vizLabel->objectName);
+
+                // Check for special cases before matching category
+                if (strncmp(vizLabel->objectName, "Dead", 4) == 0) {
+                    // Align with the behavior of VIZ_CopyActorName
+                    strncpy(vizLabel->objectCategory, "Gore", VIZ_MAX_NAME_LEN);
+                } else if (VIZ_PLAYER.mo == sprite.actor) {
+                    // Detect whether this object is current player
+                    strncpy(vizLabel->objectCategory, "Self", VIZ_MAX_NAME_LEN);
+                } else {
+                    // Convert to lowercase for lookup since the mapping uses casefolded names
+                    std::string className = sprite.actor->GetClass()->TypeName.GetChars();
+                    std::transform(className.begin(), className.end(), className.begin(), tolower);
+
+                    auto categoryIt = classToCategory.find(className);
+                    if (categoryIt != classToCategory.end()) {
+                        strncpy(vizLabel->objectCategory, categoryIt->second.c_str(), VIZ_MAX_NAME_LEN);
+                        vizLabel->objectCategory[VIZ_MAX_NAME_LEN-1] = '\0';  // Safe-guard against long category names
+                    } else {
+                        strncpy(vizLabel->objectCategory, "Unknown", VIZ_MAX_NAME_LEN);
+                    }
+                }
 
                 if(sprite.minX >= vizGameStateSM->SCREEN_WIDTH) sprite.minX = vizGameStateSM->SCREEN_WIDTH - 1;
                 if(sprite.minY >= vizGameStateSM->SCREEN_HEIGHT) sprite.minY = vizGameStateSM->SCREEN_HEIGHT - 1;

@@ -67,6 +67,7 @@ namespace vizdoom{
         double objectVelocityZ;
 
         std::string objectName;
+        std::string objectCategory;
     };
 
     struct Object {

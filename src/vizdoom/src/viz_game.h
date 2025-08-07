@@ -79,6 +79,7 @@ struct VIZLabel{
     unsigned int objectId;
     double objectPosition[9];
     char objectName[VIZ_MAX_NAME_LEN];
+    char objectCategory[VIZ_MAX_NAME_LEN];
 };
 
 struct VIZObject{

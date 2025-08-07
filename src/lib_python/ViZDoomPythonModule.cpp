@@ -399,7 +399,8 @@ PYBIND11_MODULE(vizdoom, vz){
                     o.objectVelocityX,
                     o.objectVelocityY,
                     o.objectVelocityZ,
-                    o.objectName
+                    o.objectName,
+                    o.objectCategory
                 );
             },
             [](pyb::tuple t) { // load
@@ -419,7 +420,8 @@ PYBIND11_MODULE(vizdoom, vz){
                     t[12].cast<double>(),
                     t[13].cast<double>(),
                     t[14].cast<double>(),
-                    t[15].cast<std::string>()
+                    t[15].cast<std::string>(),
+                    t[16].cast<std::string>()
                 };
             })
         )
@@ -438,7 +440,8 @@ PYBIND11_MODULE(vizdoom, vz){
         .def_readonly("object_velocity_x", &Label::objectVelocityX)
         .def_readonly("object_velocity_y", &Label::objectVelocityY)
         .def_readonly("object_velocity_z", &Label::objectVelocityZ)
-        .def_readonly("object_name", &Label::objectName);
+        .def_readonly("object_name", &Label::objectName)
+        .def_readonly("object_category", &Label::objectCategory);
 
     pyb::class_<Object>(vz, "Object", docstrings::Object)
             .def(pyb::pickle(
@@ -791,5 +794,6 @@ PYBIND11_MODULE(vizdoom, vz){
     vz.def("doom_fixed_to_float", doomFixedToDouble_double, docstrings::doomFixedToDouble, pyb::arg("doom_fixed"));
     FUNC_2_PYT_WITH_ARGS("is_binary_button", isBinaryButton, pyb::arg("button"));
     FUNC_2_PYT_WITH_ARGS("is_delta_button", isDeltaButton, pyb::arg("button"));
+    vz.def("get_default_category_mapping", getDefaultCategoryMapping, pyb::doc(docstrings::getDefaultCategoryMapping));
 
 }

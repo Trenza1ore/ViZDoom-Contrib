@@ -74,6 +74,7 @@ namespace vizdoom {
         unsigned int objectId;
         double objectPosition[9];
         char objectName[MAX_NAME_LENGTH];
+        char objectCategory[MAX_NAME_LENGTH];
     };
 
     struct SMObject {

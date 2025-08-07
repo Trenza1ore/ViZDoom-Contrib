@@ -29,6 +29,7 @@
 #include "ViZDoomExceptions.h"
 #include "ViZDoomPathHelpers.h"
 #include "ViZDoomUtilities.h"
+#include "../vizdoom/src/viz_doom_classes.h"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
@@ -353,6 +354,7 @@ namespace vizdoom {
                     this->state->labels.emplace_back();
                     std::memcpy(&this->state->labels.back().value, &smState->LABEL[i].value, labelPartSize);
                     this->state->labels.back().objectName = std::string(smState->LABEL[i].objectName);
+                    this->state->labels.back().objectCategory = std::string(smState->LABEL[i].objectCategory);
                 }
             } else this->state->labelsBuffer = nullptr;
 

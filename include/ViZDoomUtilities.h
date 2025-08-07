@@ -26,6 +26,9 @@
 
 #include "ViZDoomConsts.h"
 #include "ViZDoomTypes.h"
+#include <unordered_set>
+#include <unordered_map>
+#include <string>
 
 namespace vizdoom {
 
@@ -67,6 +70,11 @@ namespace vizdoom {
 
     bool isBinaryButton(Button button);
     bool isDeltaButton(Button button);
+
+    /* Category helpers */
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryMapping();
 
 }
 
