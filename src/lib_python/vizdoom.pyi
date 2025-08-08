@@ -2550,7 +2550,7 @@ def doom_tics_to_sec(doom_tics: float, fps: int = 35) -> float:
     Note: added in 1.1.0
     """
 
-def get_default_categories() -> set[str]:
+def get_default_categories() -> list[str]:
     """
     Returns the default object categories of Doom.
 

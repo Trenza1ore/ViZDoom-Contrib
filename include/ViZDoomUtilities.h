@@ -73,7 +73,7 @@ namespace vizdoom {
     /* Category helpers */
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    std::unordered_set<std::string> getDefaultCategories();
+    std::vector<std::string> getDefaultCategories();
 
 }
 
