@@ -26,7 +26,7 @@
 
 #include "ViZDoomConsts.h"
 #include "ViZDoomTypes.h"
-#include <unordered_set>
+#include <vector>
 #include <string>
 
 namespace vizdoom {
