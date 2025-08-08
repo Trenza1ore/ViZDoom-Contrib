@@ -94,14 +94,12 @@ Returns true if [`Button`](./enums.md#button) is delta button.
 ## Category functions
 
 ---
-### `getDefaultCategoryMapping`
+### `getDefaultCategories`
 
-| C++    | `std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryMapping()` |
+| C++    | `std::unordered_set<std::string> getDefaultCategories()` |
 | :--    | :--                                                                                            |
-| Python | `get_default_category_mapping() -> dict[str, set[str]]`                                         |
+| Python | `get_default_categories() -> set[str]`                                         |
 
-Returns the default category-to-classes mapping.
-This mapping shows which classes belong to each category in the default classification system.
-The class names are lowercase.
+Returns the default object categories of Doom.
 
 Note: added in 1.3.0.

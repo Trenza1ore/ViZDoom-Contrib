@@ -903,9 +903,7 @@ Note: changed in 1.1.0)DOCSTRING";
 
 Note: changed in 1.1.0)DOCSTRING";
 
-    const char *getDefaultCategoryMapping = R"DOCSTRING(Returns the default category-to-classes mapping.
-This mapping shows which classes belong to each category in the default classification system.
-The class names are lowercase.
+    const char *getDefaultCategories = R"DOCSTRING(Returns the default object categories of Doom.
 
 Note: added in 1.3.0.)DOCSTRING";
 
