@@ -903,7 +903,7 @@ Note: changed in 1.1.0)DOCSTRING";
 
 Note: changed in 1.1.0)DOCSTRING";
 
-    const char *getDefaultCategories = R"DOCSTRING(Returns the default object categories of Doom.
+    const char *getDefaultCategories = R"DOCSTRING(Returns the default object categories of ViZDoom.
 
 Note: added in 1.3.0.)DOCSTRING";
 

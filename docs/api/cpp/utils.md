@@ -96,10 +96,10 @@ Returns true if [`Button`](./enums.md#button) is delta button.
 ---
 ### `getDefaultCategories`
 
-| C++    | `std::unordered_set<std::string> getDefaultCategories()` |
+| C++    | `std::vector<std::string> getDefaultCategories()` |
 | :--    | :--                                                                                            |
-| Python | `get_default_categories() -> set[str]`                                         |
+| Python | `get_default_categories() -> list[str]`                                         |
 
-Returns the default object categories of Doom.
+Returns the default object categories of ViZDoom.
 
 Note: added in 1.3.0.

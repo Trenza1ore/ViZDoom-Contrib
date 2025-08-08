@@ -2824,4 +2824,4 @@ WEAPON8: GameVariable  # value = <GameVariable.WEAPON8: 35>
 WEAPON9: GameVariable  # value = <GameVariable.WEAPON9: 36>
 WHOLE: AutomapMode  # value = <AutomapMode.WHOLE: 1>
 ZOOM: Button  # value = <Button.ZOOM: 7>
-__version__: str = "1.3.0.dev2"
+__version__: str
