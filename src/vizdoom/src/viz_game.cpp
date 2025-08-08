@@ -34,6 +34,7 @@
 
 #include "d_netinf.h"
 #include "d_event.h"
+#include "d_dehacked.h"
 #include "g_game.h"
 #include "c_dispatch.h"
 #include "p_acs.h"
@@ -452,10 +453,19 @@ void VIZ_GameStateUpdateLabels(){
         for(auto& sprite : vizLabels->sprites){
             if(sprite.labeled && sprite.pointCount > 0){
                 VIZLabel *vizLabel = &vizGameStateSM->LABEL[labelCount++];
+                const PClass *actorClass;
 
                 vizLabel->objectId = VIZ_GetActorId(sprite.actor);
                 vizLabel->value = sprite.label;
-                VIZ_CopyActorName(sprite.actor, vizLabel->objectName);
+
+                // Handle DehackedPickup
+                if (sprite.actor->IsKindOf(RUNTIME_CLASS(ADehackedPickup))) {
+                    actorClass = static_cast<ADehackedPickup *>(sprite.actor)->DetermineType();
+                    strncpy(vizLabel->objectName, actorClass->TypeName.GetChars(), VIZ_MAX_NAME_LEN);
+                } else {
+                    actorClass = sprite.actor->GetClass();
+                    VIZ_CopyActorName(sprite.actor, vizLabel->objectName);
+                }
 
                 // Check for special cases before matching category
                 if (strncmp(vizLabel->objectName, "Dead", 4) == 0) {
@@ -466,7 +476,7 @@ void VIZ_GameStateUpdateLabels(){
                     strncpy(vizLabel->objectCategory, "Self", VIZ_MAX_NAME_LEN);
                 } else {
                     // Convert to lowercase for lookup since the mapping uses casefolded names
-                    std::string className = sprite.actor->GetClass()->TypeName.GetChars();
+                    std::string className = vizLabel->objectName;
                     std::transform(className.begin(), className.end(), className.begin(), tolower);
 
                     auto categoryIt = classToCategory.find(className);
