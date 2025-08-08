@@ -14,68 +14,53 @@ def custom_categories_test(scenario: str = "scenarios/defend_the_line.wad"):
     print(f"Testing custom category mapping on {scenario}...")
 
     # Create game1 instance
-    game1 = vizdoom.DoomGame()
+    game = vizdoom.DoomGame()
 
     # Set up basic configuration
-    game1.set_doom_scenario_path(scenario)
-    game1.set_window_visible(False)
-    game1.set_screen_resolution(vizdoom.ScreenResolution.RES_320X240)
-    game1.set_labels_buffer_enabled(True)
-    game1.init()
+    game.set_doom_scenario_path(scenario)
+    game.set_window_visible(False)
+    game.set_screen_resolution(vizdoom.ScreenResolution.RES_320X240)
+    game.set_labels_buffer_enabled(True)
+    game.init()
 
     # Start a new episode
     random.seed("ViZDoom!")
-    game1.set_seed(random.randrange(0, 256))
-    game1.new_episode()
+    game.set_seed(random.randrange(0, 256))
+    game.new_episode()
 
-    default_mapping = vizdoom.get_default_category_mapping()
+    doom_categories = vizdoom.get_default_categories()
     seen_objects = set()
     seen_categories = set()
 
     # Move randomly for a while to generate some labels
-    action_size = [0] * game1.get_available_buttons_size()
+    action_size = [0] * game.get_available_buttons_size()
     for _ in range(2000):
-        game1.make_action([random.random() > 0.5 for _ in action_size], 4)
+        game.make_action([random.random() > 0.5 for _ in action_size], 4)
 
         # Get the state and check labels
-        state1 = game1.get_state()
-        if state1 and state1.labels:
-            labels = sorted(state1.labels, key=lambda label: label.object_name)
-            for l1 in labels:
-                if l1.object_category == "Self":
+        state = game.get_state()
+        if state and state.labels:
+            labels = sorted(state.labels, key=lambda label: label.object_name)
+            for label in labels:
+                if label.object_category == "Self":
                     assert (
-                        l1.object_name == "DoomPlayer"
-                    ), f'Assigned "Self" to non-DoomPlayer object: {l1.object_name}'
-                elif l1.object_category == "Unknown":
-                    category_matches = [
-                        category
-                        for category in default_mapping
-                        if l1.object_name.lower() in default_mapping[category]
-                    ]
-                    assert (
-                        not category_matches
-                    ), f'Assigned "Unknown" to known object: {l1.object_name} of category "{category_matches[0]}"'
+                        label.object_name == "DoomPlayer"
+                    ), f'Assigned "Self" to non-DoomPlayer object: {label.object_name}'
                 else:
-                    category_matches = [
-                        category
-                        for category in default_mapping
-                        if l1.object_name.lower() in default_mapping[category]
-                    ]
-                    if category_matches:
-                        assert (
-                            l1.object_name.lower()
-                            in default_mapping[l1.object_category]
-                        ), f'Assigned "{l1.object_category}" to object: {l1.object_name} of category "{category_matches[0]}"'
-                seen_objects.add(l1.object_name)
-                seen_categories.add(l1.object_category)
+                    assert (
+                        label.object_category in doom_categories
+                    ), f'Unknown category "{label.object_category}" assigned to {label.object_name}'
+                seen_objects.add(label.object_name)
+                seen_categories.add(label.object_category)
         else:
-            game1.new_episode()
+            game.new_episode()
 
     # Close the game
-    game1.close()
+    game.close()
     print(
         f"Seen objects: {', '.join(sorted(seen_objects))}\nSeen categories: {', '.join(sorted(seen_categories))}\n"
     )
+    assert "Unknown" not in seen_categories, '"Unknown" category in default scenarios!'
 
 
 def test_object_categories():
