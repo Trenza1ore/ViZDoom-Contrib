@@ -501,6 +501,10 @@ def generate_header_file(
     # Casefold categories and their class lists
     casefolded_categories: dict[str, list[str]] = dict()
     for category, class_list in categories.items():
+        locate_underscore = category.find("_")
+        if locate_underscore > 0:
+            next_char = category[locate_underscore+1]
+            category = category.replace("_"+next_char, next_char.upper())
         casefolded_class_list = [class_name.casefold() for class_name in class_list]
         casefolded_categories[category] = casefolded_class_list
 

@@ -60,10 +60,12 @@ def custom_categories_test(scenario: str = "scenarios/defend_the_line.wad"):
                         category
                         for category in default_mapping
                         if l1.object_name.lower() in default_mapping[category]
-                    ] + ["Unknown"]
-                    assert (
-                        l1.object_name.lower() in default_mapping[l1.object_category]
-                    ), f'Assigned "{l1.object_category}" to object: {l1.object_name} of category "{category_matches[0]}"'
+                    ]
+                    if category_matches:
+                        assert (
+                            l1.object_name.lower()
+                            in default_mapping[l1.object_category]
+                        ), f'Assigned "{l1.object_category}" to object: {l1.object_name} of category "{category_matches[0]}"'
                 seen_objects.add(l1.object_name)
                 seen_categories.add(l1.object_category)
         else:

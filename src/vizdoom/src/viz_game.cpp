@@ -475,15 +475,40 @@ void VIZ_GameStateUpdateLabels(){
                     // Detect whether this object is current player
                     strncpy(vizLabel->objectCategory, "Self", VIZ_MAX_NAME_LEN);
                 } else {
-                    // Convert to lowercase for lookup since the mapping uses casefolded names
-                    std::string className = vizLabel->objectName;
-                    std::transform(className.begin(), className.end(), className.begin(), tolower);
+                    PClass *currentClass = const_cast<PClass *>(actorClass);
+                    bool isUnknown = true;
 
-                    auto categoryIt = classToCategory.find(className);
-                    if (categoryIt != classToCategory.end()) {
-                        strncpy(vizLabel->objectCategory, categoryIt->second.c_str(), VIZ_MAX_NAME_LEN);
-                        vizLabel->objectCategory[VIZ_MAX_NAME_LEN-1] = '\0';  // Safe-guard against long category names
-                    } else {
+                    while (currentClass != nullptr)
+                    {
+                        // Convert to lowercase for lookup since the mapping uses casefolded names
+                        std::string className = currentClass->TypeName.GetChars();
+
+                        // Special case: HealthPickup is parallel to Health but is Health category
+                        if (className.compare("HealthPickup") == 0) {
+                            className = "Health";
+                        }
+
+                        // Class could be a category (like Health for CustomMedikit and Poison)
+                        if (categoryToClasses.find(className) != categoryToClasses.end()) {
+                            strncpy(vizLabel->objectCategory, className.c_str(), VIZ_MAX_NAME_LEN);
+                            isUnknown = false;
+                            break;
+                        }
+
+                        std::transform(className.begin(), className.end(), className.begin(), tolower);
+
+                        auto categoryIt = classToCategory.find(className);
+                        if (categoryIt != classToCategory.end()) {
+                            strncpy(vizLabel->objectCategory, categoryIt->second.c_str(), VIZ_MAX_NAME_LEN);
+                            vizLabel->objectCategory[VIZ_MAX_NAME_LEN-1] = '\0';  // Safe-guard against long names
+                            isUnknown = false;
+                            break;
+                        } else {
+                            currentClass = currentClass->ParentClass;
+                        }
+                    }
+
+                    if (isUnknown) {
                         strncpy(vizLabel->objectCategory, "Unknown", VIZ_MAX_NAME_LEN);
                     }
                 }
