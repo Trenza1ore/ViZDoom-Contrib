@@ -794,6 +794,6 @@ PYBIND11_MODULE(vizdoom, vz){
     vz.def("doom_fixed_to_float", doomFixedToDouble_double, docstrings::doomFixedToDouble, pyb::arg("doom_fixed"));
     FUNC_2_PYT_WITH_ARGS("is_binary_button", isBinaryButton, pyb::arg("button"));
     FUNC_2_PYT_WITH_ARGS("is_delta_button", isDeltaButton, pyb::arg("button"));
-    vz.def("get_default_category_mapping", getDefaultCategoryMapping, pyb::doc(docstrings::getDefaultCategoryMapping));
+    vz.def("get_default_categories", getDefaultCategories, pyb::doc(docstrings::getDefaultCategories));
 
 }

@@ -280,7 +280,7 @@ namespace vizdoom {
         return button >= BINARY_BUTTON_COUNT && button < BUTTON_COUNT;
     }
 
-    std::unordered_map<std::string, std::unordered_set<std::string>> getDefaultCategoryMapping() {
-        return categoryToClasses;
+    std::unordered_set<std::string> getDefaultCategories() {
+        return categories;
     }
 }

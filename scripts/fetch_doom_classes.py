@@ -550,14 +550,11 @@ def generate_header_file(
 """  # noqa
 
     # Add category to classes mapping
-    header_content += "// Mapping from category names to sets of class names\n"
-    header_content += "const std::unordered_map<std::string, std::unordered_set<std::string>> categoryToClasses = {\n"
+    header_content += "// Listing default object categories in Doom\n"
+    header_content += "const std::unordered_set<std::string> categories = {\n"
 
     for category, class_list in sorted(casefolded_categories.items()):
-        header_content += f'    {{"{category}", {{\n'
-        for class_name in class_list:
-            header_content += f'        "{class_name}",\n'
-        header_content += "    }},\n"
+        header_content += f'    "{category}",\n'
 
     header_content += "};\n\n"
 

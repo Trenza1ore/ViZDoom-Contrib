@@ -489,7 +489,7 @@ void VIZ_GameStateUpdateLabels(){
                         }
 
                         // Class could be a category (like Health for CustomMedikit and Poison)
-                        if (categoryToClasses.find(className) != categoryToClasses.end()) {
+                        if (categories.find(className) != categories.end()) {
                             strncpy(vizLabel->objectCategory, className.c_str(), VIZ_MAX_NAME_LEN);
                             isUnknown = false;
                             break;
