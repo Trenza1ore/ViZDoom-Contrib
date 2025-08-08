@@ -49,7 +49,7 @@ public:
 	void PlayPickupSound (AActor *toucher);
 	void DoPickupSpecial (AActor *toucher);
 	void Serialize(FArchive &arc);
-	const PClass *DetermineType ();  // has to be pubic for semantic segmentation
+	const PClass *DetermineType ();  // has to be public for semantic segmentation
 private:
 	AInventory *RealPickup;
 public:
