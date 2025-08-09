@@ -204,7 +204,7 @@ class VizdoomEnv(gym.Env, EzPickle):
         options: Optional[dict] = None,
     ):
         super().reset(seed=seed)
-        # Ensure the game is seeded for reproducibility
+        # Ensure DoomGame is always seeded with an unsigned int from gymnasium.Env's internal RNG
         game_seed = int(
             self.np_random.integers(0, np.iinfo(np.uint32).max + 1, dtype=np.uint32)
         )
