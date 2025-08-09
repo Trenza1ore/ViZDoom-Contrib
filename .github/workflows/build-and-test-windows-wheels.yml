@@ -65,6 +65,9 @@ jobs:
         repository: mwydmuch/ViZDoomWinDepBin
         path: ${{ github.workspace }}\deps
 
+    - name: Use 7-Zip 25.00
+      run: choco install 7zip --version=25.0 -y --force
+
     - name: Install boost
       uses: MarkusJx/install-boost@v1.0.1
       id: install-boost
