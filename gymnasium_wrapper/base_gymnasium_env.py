@@ -205,8 +205,10 @@ class VizdoomEnv(gym.Env, EzPickle):
     ):
         super().reset(seed=seed)
         # Ensure the game is seeded for reproducibility
-        if self._np_random_seed is not None:
-            self.game.set_seed(self._np_random_seed)
+        game_seed = int(
+            self.np_random.integers(0, np.iinfo(np.uint32).max + 1, dtype=np.uint32)
+        )
+        self.game.set_seed(game_seed)
         self.game.new_episode()
         self.state = self.game.get_state()
 
