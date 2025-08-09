@@ -11,7 +11,7 @@ on:
       - 'CMakeLists.txt'
       - 'setup.py'
       - 'pyproject.toml'
-    branches: [downgrade-7z]
+    branches: [master]
   pull_request:
     paths:
       - '.github/workflows/build-and-test-windows-wheels.yml'
@@ -65,7 +65,7 @@ jobs:
         repository: mwydmuch/ViZDoomWinDepBin
         path: ${{ github.workspace }}\deps
 
-    - name: Use 7-Zip 25.00
+    - name: Force install 7-Zip 25.00 for MarkusJx/install-boost compatibility
       run: choco install 7zip --version=25.0 -y --force
 
     - name: Install boost
