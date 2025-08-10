@@ -69,8 +69,9 @@ jobs:
       id: cache-7z
       uses: actions/cache@v4
       with:
-        path: C:\Program Files\7-Zip
-        path: C:\ProgramData\chocolatey\lib\7zip
+        path: |
+          C:\Program Files\7-Zip
+          C:\ProgramData\chocolatey\lib\7zip
         key: 7zip-25.0-${{ runner.os }}
 
     - name: Install 7-Zip 25.00 for compatibility
