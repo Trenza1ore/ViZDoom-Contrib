@@ -44,6 +44,12 @@ jobs:
         with:
           platforms: all
 
+      - name: Install libboost-all-dev
+        if: matrix.os == 'ubuntu-24.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libboost-all-dev
+
       - name: Build manylinux wheels
         if: matrix.os == 'ubuntu-24.04'
         uses: pypa/cibuildwheel@v2.23.3
