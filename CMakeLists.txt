@@ -28,7 +28,14 @@ if(POLICY CMP0003)
 endif()
 
 if(POLICY CMP0167)
-  cmake_policy(SET CMP0167 NEW)
+  find_package(Boost 1.70 QUIET CONFIG)
+  if(Boost_FOUND)
+    cmake_policy(SET CMP0167 NEW)
+  else()
+    cmake_policy(SET CMP0167 OLD)
+  endif()
+  unset(Boost_FOUND CACHE)
+  unset(Boost_DIR CACHE)
 endif()
 
 # Add cmake_modules to module
