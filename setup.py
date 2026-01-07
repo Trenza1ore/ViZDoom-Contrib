@@ -35,6 +35,7 @@ package_data = [
     "vizdoom.pyi",
     "py.typed",
     "bots.cfg",
+    "freedoom1.wad",
     "freedoom2.wad",
     "vizdoom.pk3",
 ]
@@ -233,8 +234,8 @@ setup(
     extras_require={
         "test": ["pytest", "psutil"],
     },
-    install_requires=["numpy", "gymnasium>=0.28.0", "pygame>=2.1.3", "lockfile"],
-    python_requires=">=3.9.0,<3.14",
+    install_requires=["numpy", "gymnasium>=0.28.0", "pygame-ce>=2.1.3", "lockfile"],
+    python_requires=">=3.9.0,<3.15",
     packages=packages,
     package_dir={"": package_root},
     package_data={"vizdoom": package_data},
@@ -255,6 +256,7 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX :: Linux",
