@@ -5,21 +5,44 @@
 
 import os
 import pickle
+import re
 
 import gymnasium
 import numpy as np
 from gymnasium.spaces import Box, Dict, Discrete, MultiBinary, MultiDiscrete, Text
 from gymnasium.utils.env_checker import check_env, data_equivalence
 
-from vizdoom import gymnasium_wrapper  # noqa
+from vizdoom import gymnasium_wrapper
 from vizdoom.gymnasium_wrapper.base_gymnasium_env import VizdoomEnv
 
 
-vizdoom_envs = [
-    env
-    for env in [env_spec.id for env_spec in gymnasium.envs.registry.values()]  # type: ignore
-    if "Vizdoom" in env
-]
+env_patterns = {
+    "doom": r"(VizdoomDoomE[0-9]+M[0-9]+)",
+    "doom2": r"(VizdoomDoom2MAP[0-9]+)",
+    "freedoom": r"(VizdoomFreedoomE[0-9]+M[0-9]+)",
+    "freedoom2": r"(VizdoomFreedoom2MAP[0-9]+)",
+}
+doom_wad_map_patterns = re.compile("|".join(env_patterns.values()))
+
+
+def get_testable_envs() -> list[str]:
+    """
+    Helper function to get all ViZDoom environments that are actually testable
+
+    Returns:
+        list[str]: list of ViZDoom environment ids that can be tested
+    """
+    ignore_pattern = re.compile(
+        "|".join(env_patterns[game] for game in gymnasium_wrapper.WAD_UNAVAILABLE)
+    )
+    return [
+        env
+        for env in [env_spec.id for env_spec in gymnasium.envs.registry.values()]  # type: ignore
+        if "Vizdoom" in env and ignore_pattern.match(env) is None
+    ]
+
+
+vizdoom_envs = get_testable_envs()
 test_env_configs = f"{os.path.dirname(os.path.abspath(__file__))}/env_configs"
 envs_with_animated_textures = [
     "VizdoomHealthGathering",
