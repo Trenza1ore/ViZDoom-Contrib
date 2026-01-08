@@ -116,7 +116,7 @@ class VizdoomEnv(gym.Env, EzPickle):
 
         # override config file settings with skill level and map if specified
         if skill_level is not None:
-            self.game.set_skill_level(skill_level)
+            self.game.set_doom_skill(skill_level)
         if map is not None:
             self.game.set_doom_map(map)
 

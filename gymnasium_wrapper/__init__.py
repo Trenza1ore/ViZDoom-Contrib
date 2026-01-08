@@ -249,7 +249,7 @@ for game_name, config_file, maps in [
                 id=f"Vizdoom{game_name}{map}-{skill}-v0",
                 entry_point=DEFAULT_VIZDOOM_ENTRYPOINT,
                 kwargs={
-                    "scenario_config_file=": f"{config_file}",
+                    "scenario_config_file": f"{config_file}",
                     "map": map,
                     "skill_level": int(skill[1]),
                     "max_buttons_pressed": 0,
