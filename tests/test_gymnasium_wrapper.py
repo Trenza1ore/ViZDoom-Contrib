@@ -12,12 +12,10 @@ import numpy as np
 from gymnasium.spaces import Box, Dict, Discrete, MultiBinary, MultiDiscrete, Text
 from gymnasium.utils.env_checker import check_env, data_equivalence
 
-from vizdoom import gymnasium_wrapper
+from vizdoom import gymnasium_wrapper  # noqa
 from vizdoom.gymnasium_wrapper.base_gymnasium_env import VizdoomEnv
 
 
-# Environments based on Freedoom and Doom WADs are not deterministic currently
-SKIP_DOOM_WAD_MAP_DETERMINISTIC_CHECKS = True
 env_patterns = {
     "doom": r"(VizdoomDoomE[0-9]+M[0-9]+)",
     "doom2": r"(VizdoomDoom2MAP[0-9]+)",
@@ -35,7 +33,7 @@ def get_testable_envs() -> list[str]:
         list[str]: list of ViZDoom environment ids that can be tested
     """
     ignore_pattern = re.compile(
-        "|".join(env_patterns[game] for game in gymnasium_wrapper.WAD_UNAVAILABLE)
+        "|".join(env_patterns[game] for game in ["doom", "doom2", "freedoom"])
     )
     return [
         env
@@ -50,6 +48,9 @@ envs_with_animated_textures = [
     "VizdoomHealthGathering",
     "VizdoomHealthGatheringSupreme",
     "VizdoomDeathmatch",
+    "VizdoomFreedoom2MAP20",
+    "VizdoomFreedoom2MAP26",
+    "VizdoomFreedoom2MAP27",
 ]
 envs_with_audio = [
     "VizdoomBasicAudio",
@@ -62,6 +63,8 @@ buffers = ["screen", "depth", "labels", "automap", "audio", "notifications"]
 def test_gymnasium_wrapper():
     print("Testing Gymnasium wrapper compatibility with gymnasium API")
     for env_name in vizdoom_envs:
+        if doom_wad_map_patterns.match(env_name) and env_name.split("-")[-2] != "S1":
+            continue
         print(f"  Env: {env_name}")
 
         # Skip environments with animated textures and audio
@@ -71,16 +74,12 @@ def test_gymnasium_wrapper():
             continue
 
         for frame_skip in [1, 4]:
-            env = gymnasium.make(env_name, frame_skip=frame_skip)
+            env = gymnasium.make(
+                env_name, frame_skip=frame_skip, need_deterministic=True
+            )
 
             # Test if env adheres to Gymnasium API
-            if SKIP_DOOM_WAD_MAP_DETERMINISTIC_CHECKS and doom_wad_map_patterns.match(
-                env_name
-            ):
-                if frame_skip == 1:
-                    print(f"    Skipped check_env on {env_name}")
-            else:
-                check_env(env.unwrapped, skip_render_check=True)
+            check_env(env.unwrapped, skip_render_check=True)
 
             ob_space = env.observation_space
             act_space = env.action_space
@@ -109,6 +108,8 @@ def test_gymnasium_wrapper():
 def test_gymnasium_wrapper_terminal_state():
     print("Testing Gymnasium rollout (checking terminal state)")
     for env_name in vizdoom_envs:
+        if doom_wad_map_patterns.match(env_name) and env_name.split("-")[-2] != "S1":
+            continue
         print(f"  Env: {env_name}")
 
         for frame_skip in [1, 4]:
@@ -578,9 +579,13 @@ def _compare_envs(
 def test_gymnasium_wrapper_pickle():
     print("Testing Gymnasium wrapper pickling (EzPickle).")
     for env_name in vizdoom_envs:
+        if doom_wad_map_patterns.match(env_name) and env_name.split("-")[-2] != "S1":
+            continue
         print(f"  Env: {env_name}")
 
-        env1 = gymnasium.make(env_name, frame_skip=1, max_buttons_pressed=0)
+        env1 = gymnasium.make(
+            env_name, frame_skip=1, max_buttons_pressed=0, need_deterministic=True
+        )
         env2 = pickle.loads(pickle.dumps(env1))
 
         _compare_envs(
@@ -596,10 +601,16 @@ def test_gymnasium_wrapper_pickle():
 def test_gymnasium_wrapper_seed():
     print("Testing gymnasium wrapper seeding.")
     for env_name in vizdoom_envs:
+        if doom_wad_map_patterns.match(env_name) and env_name.split("-")[-2] != "S1":
+            continue
         print(f"  Env: {env_name}")
 
-        env1 = gymnasium.make(env_name, frame_skip=1, max_buttons_pressed=0)
-        env2 = gymnasium.make(env_name, frame_skip=1, max_buttons_pressed=0)
+        env1 = gymnasium.make(
+            env_name, frame_skip=1, max_buttons_pressed=0, need_deterministic=True
+        )
+        env2 = gymnasium.make(
+            env_name, frame_skip=1, max_buttons_pressed=0, need_deterministic=True
+        )
 
         _compare_envs(
             env1,
