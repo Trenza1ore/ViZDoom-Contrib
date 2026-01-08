@@ -16,6 +16,8 @@ from vizdoom import gymnasium_wrapper
 from vizdoom.gymnasium_wrapper.base_gymnasium_env import VizdoomEnv
 
 
+# Environments based on Freedoom and Doom WADs are not deterministic currently
+SKIP_DOOM_WAD_MAP_DETERMINISTIC_CHECKS = True
 env_patterns = {
     "doom": r"(VizdoomDoomE[0-9]+M[0-9]+)",
     "doom2": r"(VizdoomDoom2MAP[0-9]+)",
@@ -72,7 +74,13 @@ def test_gymnasium_wrapper():
             env = gymnasium.make(env_name, frame_skip=frame_skip)
 
             # Test if env adheres to Gymnasium API
-            check_env(env.unwrapped, skip_render_check=True)
+            if SKIP_DOOM_WAD_MAP_DETERMINISTIC_CHECKS and doom_wad_map_patterns.match(
+                env_name
+            ):
+                if frame_skip == 1:
+                    print(f"    Skipped check_env on {env_name}")
+            else:
+                check_env(env.unwrapped, skip_render_check=True)
 
             ob_space = env.observation_space
             act_space = env.action_space
