@@ -45,6 +45,7 @@ class VizdoomEnv(gym.Env, EzPickle):
         map: Optional[str] = None,
         treat_episode_timeout_as_truncation: bool = True,
         use_multi_binary_action_space: bool = True,
+        need_deterministic: bool = False,
     ):
         """
         Base class for Gymnasium interface for ViZDoom.
@@ -74,6 +75,8 @@ class VizdoomEnv(gym.Env, EzPickle):
                                                     will be used for buttons binary buttons instead of ``MultiDiscrete([2] * len(num_binary_buttons))``.
                                                     This is compatibility option, ViZDoom versions <1.3.0 behave as if this was set to False.
                                                     Default: True.
+            need_deterministic (bool):  If True, disable non-deterministic features such as automap buffer,
+                                        Default: False.
 
         This environment forces the game window to be hidden. Use :meth:`render` function to see the game.
 
@@ -104,6 +107,7 @@ class VizdoomEnv(gym.Env, EzPickle):
             map,
             treat_episode_timeout_as_truncation,
             use_multi_binary_action_space,
+            need_deterministic,
         )
         self.frame_skip = frame_skip
         self.render_mode = render_mode
@@ -113,6 +117,10 @@ class VizdoomEnv(gym.Env, EzPickle):
         # init game
         self.game = vzd.DoomGame()
         self.game.load_config(config_file)
+
+        # disable non-deterministic features if need_deterministic is True
+        if need_deterministic:
+            self.game.set_automap_buffer_enabled(False)
 
         # override config file settings with skill level and map if specified
         if skill_level is not None:
