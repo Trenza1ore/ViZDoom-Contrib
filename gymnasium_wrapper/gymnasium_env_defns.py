@@ -20,6 +20,15 @@ class VizdoomScenarioEnv(VizdoomEnv, EzPickle):
         treat_episode_timeout_as_truncation: bool = True,
         use_multi_binary_action_space: bool = True,
     ):
+        super().__init__(
+            config_file=os.path.join(scenarios_path, scenario_config_file),
+            config_dict=additional_config_dict,
+            frame_skip=frame_skip,
+            max_buttons_pressed=max_buttons_pressed,
+            render_mode=render_mode,
+            treat_episode_timeout_as_truncation=treat_episode_timeout_as_truncation,
+            use_multi_binary_action_space=use_multi_binary_action_space,
+        )
         EzPickle.__init__(
             self,
             scenario_config_file,
@@ -29,13 +38,4 @@ class VizdoomScenarioEnv(VizdoomEnv, EzPickle):
             render_mode,
             treat_episode_timeout_as_truncation,
             use_multi_binary_action_space,
-        )
-        super().__init__(
-            config_file=os.path.join(scenarios_path, scenario_config_file),
-            config_dict=additional_config_dict,
-            frame_skip=frame_skip,
-            max_buttons_pressed=max_buttons_pressed,
-            render_mode=render_mode,
-            treat_episode_timeout_as_truncation=treat_episode_timeout_as_truncation,
-            use_multi_binary_action_space=use_multi_binary_action_space,
         )
