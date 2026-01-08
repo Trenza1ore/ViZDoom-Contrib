@@ -18,19 +18,20 @@ class VizdoomScenarioEnv(VizdoomEnv, EzPickle):
         treat_episode_timeout_as_truncation=True,
         **kwargs,
     ):
-        EzPickle.__init__(
-            self,
-            scenario_config_file,
-            frame_skip,
-            max_buttons_pressed,
-            render_mode,
-            **kwargs,
-        )
         super().__init__(
             os.path.join(scenarios_path, scenario_config_file),
             frame_skip,
             max_buttons_pressed,
             render_mode,
             treat_episode_timeout_as_truncation=treat_episode_timeout_as_truncation,
+            **kwargs,
+        )
+        EzPickle.__init__(
+            self,
+            scenario_config_file,
+            frame_skip,
+            max_buttons_pressed,
+            render_mode,
+            treat_episode_timeout_as_truncation,
             **kwargs,
         )
