@@ -34,6 +34,10 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 norecursedirs = ["src/lib_python/pybind11/tests", "examples", "docs", "build", "bin", "venv", ".venv", ".git"]
 
+[pytest]
+faulthandler_timeout = 300  # 5 minutes timeout
+faulthandler_exit_on_timeout = true
+
 [tool.cibuildwheel]
 # We need to build for the following Python versions:
 build = "cp{39,310,311,312,313,314}-*"
